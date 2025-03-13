@@ -1,0 +1,24 @@
+```
+
+2. **Agregar las siguientes líneas al archivo `.gitignore`**:
+
+```plaintext
+# Python
+*.pyc
+__pycache__/
+
+# Entorno virtual
+venv/
+
+# Archivos de configuración de entorno
+.env
+
+# Archivos de logs
+*.log
+
+# Archivos de base de datos
+*.sqlite3
+
+# Archivos de configuración de IDE
+.vscode/
+.idea/

@@ -1,42 +1,59 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="es">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Chat Application</title>
+    <title>Chat con Rasgael</title>
     <link rel="stylesheet" href="{{ url_for('static', filename='styles.css') }}">
 </head>
 <body>
     <div class="chat-container">
-        <div class="messages" id="messages">
-            {% for message in messages %}
-                <div class="message">
-                    <strong>{{ message.sender }}:</strong> {{ message.text }}
-                </div>
-            {% endfor %}
-        </div>
-        <form id="message-form" action="{{ url_for('main.send_message') }}" method="POST">
-            <input type="text" name="message" id="message" placeholder="Type your message..." required>
-            <button type="submit">Send</button>
+        <div class="messages" id="messages"></div>
+        <form id="message-form" class="message-form">
+            <input type="text" id="message" placeholder="Escribe tu mensaje..." required>
+            <button type="submit">Enviar</button>
         </form>
     </div>
+
     <script>
         const form = document.getElementById('message-form');
         const messagesDiv = document.getElementById('messages');
 
-        form.onsubmit = function(event) {
+        form.onsubmit = async function(event) {
             event.preventDefault();
             const messageInput = document.getElementById('message');
-            const messageText = messageInput.value;
+            const messageText = messageInput.value.trim();
 
-            // Append the new message to the messages div
-            const newMessage = document.createElement('div');
-            newMessage.classList.add('message');
-            newMessage.innerHTML = `<strong>You:</strong> ${messageText}`;
-            messagesDiv.appendChild(newMessage);
+            if (!messageText) return;
 
-            // Clear the input
+            // Mostrar mensaje del usuario en pantalla
+            const userMessage = document.createElement('div');
+            userMessage.classList.add('message');
+            userMessage.innerHTML = `<strong>You:</strong> ${messageText}`;
+            messagesDiv.appendChild(userMessage);
+
+            // Limpiar el input
             messageInput.value = '';
+
+            // Enviar el mensaje al backend usando JSON
+            const response = await fetch("{{ url_for('main.send_message') }}", {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({ message: messageText })
+            });
+
+            const data = await response.json();
+
+            // Mostrar respuesta de Rasgael
+            const botMessage = document.createElement('div');
+            botMessage.classList.add('message');
+            botMessage.innerHTML = `<strong>Rasgael:</strong> ${data.bot_message}`;
+            messagesDiv.appendChild(botMessage);
+
+            // Hacer scroll automático al final del chat
+            messagesDiv.scrollTop = messagesDiv.scrollHeight;
         };
     </script>
 </body>
