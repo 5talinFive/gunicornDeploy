@@ -1,118 +1,161 @@
 body {
     font-family: Arial, sans-serif;
-    background-color: #f4f4f9;
+    background-color: #2c2c2c;
+    color: #e0e0e0;
+    margin: 0;
+    padding: 0;
     display: flex;
     justify-content: center;
     align-items: center;
     height: 100vh;
-    margin: 0;
+}
+
+.main-container {
+    display: flex;
+    align-items: center; /* Centrar verticalmente */
+}
+
+.container {
+    text-align: center;
+    background-color: #3c3c3c;
+    padding: 20px;
+    border-radius: 8px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.5);
+    width: 90%;
+    max-width: 600px;
+    position: relative;
+    z-index: 1;
+}
+
+h1 {
+    color: #ffffff;
+}
+
+p {
+    color: #b0b0b0;
 }
 
 .chat-container {
-    background-color: #fff;
+    margin-top: 20px;
+    border: 1px solid #555;
+    padding: 10px;
     border-radius: 8px;
-    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
-    width: 100%;
-    max-width: 600px; /* Aumentado para parecerse más a ChatGPT */
-    min-width: 400px; /* Evita que sea demasiado estrecho */
-    display: flex;
-    flex-direction: column;
-    overflow: hidden;
-    height: 500px; /* Fija la altura del chat */
+    background-color: #4c4c4c;
+    height: 400px;
+    overflow-y: auto;
+    text-align: left; /* Alineación del texto a la izquierda */
 }
 
-/* Contenedor de mensajes */
-.messages {
-    flex: 1;
-    padding: 20px;
-    overflow-y: auto; /* Permite desplazamiento interno */
-    scroll-behavior: smooth; /* Scroll suave */
-    background-color: #fafafa;
-}
-
-/* Mensajes */
-.message {
-    margin-bottom: 10px;
-    padding: 10px;
-    border-radius: 5px;
-    max-width: 80%;
-}
-
-.message strong {
-    display: block;
-    margin-bottom: 5px;
-}
-
-.message.user {
-    background-color: #d1e7ff;
-    text-align: right;
-    align-self: flex-end;
-}
-
-.message.bot {
-    background-color: #e9ecef;
-    text-align: left;
-    align-self: flex-start;
-}
-
-/* Formulario de entrada */
 .message-form {
+    margin-top: 20px;
     display: flex;
-    padding: 10px;
-    border-top: 1px solid #ddd;
-    background: white;
+    justify-content: space-between;
 }
 
-.message-form input {
+#message {
     flex: 1;
     padding: 10px;
-    border: 1px solid #ccc;
-    border-radius: 5px;
-    outline: none;
+    border: 1px solid #555;
+    border-radius: 4px;
+    background-color: #3c3c3c;
+    color: #e0e0e0;
+    margin-right: 10px;
 }
 
-.message-form button {
-    padding: 10px;
+button {
+    padding: 10px 20px;
     border: none;
+    border-radius: 4px;
     background-color: #007bff;
-    color: #fff;
-    border-radius: 5px;
+    color: white;
     cursor: pointer;
-    margin-left: 10px;
 }
 
-.message-form button:hover {
+button:hover {
     background-color: #0056b3;
 }
 
-/* @media query para pantallas pequeñas */
-@media (max-width: 768px) {
-    .chat-container {
-        width: 90%;  /* Se adapta al 90% del ancho de la pantalla */
-        height: 450px; /* Ajusta la altura para pantallas pequeñas */
-    }
-
-    .message-form input {
-        padding: 8px;  /* Reduce el padding del input para móviles */
-    }
-
-    .message-form button {
-        padding: 8px;  /* Reduce el padding del botón */
-    }
+.messages {
+    color: #e0e0e0;
 }
 
-/* @media query para pantallas muy pequeñas (móviles) */
-@media (max-width: 480px) {
+.user-message, .bot-message {
+    margin: 10px 0;
+    padding: 10px;
+    border-radius: 4px;
+}
+
+.user-message {
+    background-color: #007bff;
+    color: white;
+    text-align: left;
+}
+
+.bot-message {
+    background-color: #555;
+    color: white;
+    text-align: left;
+}
+
+.image-container {
+    margin-left: -40px; /* Acercar la imagen al borde de la ventana de chat */
+    display: flex;
+    align-items: center; /* Centrar verticalmente */
+}
+
+.image-container img {
+    max-width: 200px; /* Hacer la imagen más grande */
+    height: auto;
+}
+
+.mobile-image {
+    display: none;
+}
+
+/* Responsive design */
+@media (max-width: 600px) {
+    .main-container {
+        flex-direction: column;
+        align-items: center;
+    }
+
+    .container {
+        width: 100%;
+        padding: 10px;
+    }
+
     .chat-container {
-        width: 95%;  /* Se adapta al 95% del ancho en pantallas muy pequeñas */
-        height: 400px; /* Ajusta aún más la altura */
+        height: 300px;
     }
 
-    .message-form input {
-        font-size: 14px; /* Reduce el tamaño de la fuente del input */
+    .message-form {
+        flex-direction: column;
     }
 
-    .message-form button {
-        font-size: 14px; /* Reduce el tamaño del botón */
+    #message {
+        margin-right: 0;
+        margin-bottom: 10px;
+    }
+
+    button {
+        width: 100%;
+    }
+
+    .image-container {
+        margin-left: 0;
+        margin-top: 20px;
+    }
+
+    .image-container img {
+        max-width: 150px; /* Ajustar el tamaño de la imagen en dispositivos móviles */
+    }
+
+    .desktop-image {
+        display: none;
+    }
+
+    .mobile-image {
+        display: block;
+        margin-top: 10px;
     }
 }

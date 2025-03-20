@@ -7,15 +7,23 @@
     <link rel="stylesheet" href="{{ url_for('static', filename='styles.css') }}">
 </head>
 <body>
-    <div class="container">
-        <h1>Consulta tus calificaciones aquí</h1>
-        <p>Ejemplo: Dame mis calificaciones 2220077777 (Tú número de cédula.)</p>
-        <div class="chat-container">
-            <div class="messages" id="messages"></div>
-            <form id="message-form" class="message-form">
-                <input type="text" id="message" placeholder="Escribe tu mensaje..." required>
-                <button type="submit">Enviar</button>
-            </form>
+    <div class="main-container">
+        <div class="container">
+            <h1>Consulta tus calificaciones aquí</h1>
+            <p>Ejemplo: Dame mis calificaciones 2220077777 (Tú número de cédula.)</p>
+            <div class="chat-container">
+                <div class="messages" id="messages"></div>
+                <form id="message-form" class="message-form">
+                    <input type="text" id="message" placeholder="Escribe tu mensaje..." required>
+                    <button type="submit">Enviar</button>
+                </form>
+            </div>
+        </div>
+        <div class="image-container desktop-image">
+            <img src="{{ url_for('static', filename='assets/rasgaelcompleto.png') }}" alt="Rasgael">
+        </div>
+        <div class="image-container mobile-image">
+            <img src="{{ url_for('static', filename='assets/rasgaelicon.png') }}" alt="Rasgael Icon">
         </div>
     </div>
 
@@ -23,42 +31,37 @@
         const form = document.getElementById('message-form');
         const messagesDiv = document.getElementById('messages');
 
-        form.onsubmit = async function(event) {
+        form.addEventListener('submit', function(event) {
             event.preventDefault();
-            const messageInput = document.getElementById('message');
-            const messageText = messageInput.value.trim();
+            const userMessage = document.getElementById('message').value.trim();
+            if (userMessage === "") return;
 
-            if (!messageText) return;
+            const userMessageDiv = document.createElement('div');
+            userMessageDiv.classList.add('user-message');
+            userMessageDiv.textContent = userMessage;
+            messagesDiv.appendChild(userMessageDiv);
 
-            // Mostrar mensaje del usuario en pantalla
-            const userMessage = document.createElement('div');
-            userMessage.classList.add('message');
-            userMessage.innerHTML = `<strong>Tu:</strong> ${messageText}`;
-            messagesDiv.appendChild(userMessage);
-
-            // Limpiar el input
-            messageInput.value = '';
-
-            // Enviar el mensaje al backend usando JSON
-            const response = await fetch("{{ url_for('main.send_message') }}", {
-                method: 'POST',
+            fetch("/send_message", {
+                method: "POST",
                 headers: {
-                    'Content-Type': 'application/json'
+                    "Content-Type": "application/json"
                 },
-                body: JSON.stringify({ message: messageText })
+                body: JSON.stringify({ message: userMessage })
+            })
+            .then(response => response.json())
+            .then(data => {
+                const botMessageDiv = document.createElement('div');
+                botMessageDiv.classList.add('bot-message');
+                botMessageDiv.innerHTML = data.bot_message;
+                messagesDiv.appendChild(botMessageDiv);
+                messagesDiv.scrollTop = messagesDiv.scrollHeight;
+            })
+            .catch(error => {
+                console.error("Error:", error);
             });
 
-            const data = await response.json();
-
-            // Mostrar respuesta de Rasgael
-            const botMessage = document.createElement('div');
-            botMessage.classList.add('message');
-            botMessage.innerHTML = `<strong>Rasgael:</strong> ${data.bot_message}`;
-            messagesDiv.appendChild(botMessage);
-
-            // Hacer scroll automático al final del chat
-            messagesDiv.scrollTop = messagesDiv.scrollHeight;
-        };
+            document.getElementById('message').value = "";
+        });
     </script>
 </body>
 </html>
