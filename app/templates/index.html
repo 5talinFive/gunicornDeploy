@@ -7,12 +7,16 @@
     <link rel="stylesheet" href="{{ url_for('static', filename='styles.css') }}">
 </head>
 <body>
-    <div class="chat-container">
-        <div class="messages" id="messages"></div>
-        <form id="message-form" class="message-form">
-            <input type="text" id="message" placeholder="Escribe tu mensaje..." required>
-            <button type="submit">Enviar</button>
-        </form>
+    <div class="container">
+        <h1>Consulta tus calificaciones aquí</h1>
+        <p>Ejemplo: Dame mis calificaciones 2220077777</p>
+        <div class="chat-container">
+            <div class="messages" id="messages"></div>
+            <form id="message-form" class="message-form">
+                <input type="text" id="message" placeholder="Escribe tu mensaje..." required>
+                <button type="submit">Enviar</button>
+            </form>
+        </div>
     </div>
 
     <script>
