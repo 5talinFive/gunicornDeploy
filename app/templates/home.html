@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Interfaz Responsive</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='home.css') }}">
+</head>
+<body>
+    <!-- Encabezado fijo -->
+    <header class="header">
+        <div class="header-content">
+            <img src="{{ url_for('static', filename='assets/favicon.png') }}" alt="Favicon" class="header-icon">
+            <a href="https://colegiopceirafaelgaleth.com/" target="_blank">
+                <img src="{{ url_for('static', filename='assets/logocole.png') }}" alt="Logo" class="header-icon logo-icon">
+            </a>
+        </div>
+    </header>
+
+    <!-- Ícono superior centrado -->
+    <div class="icon-container">
+        <img src="{{ url_for('static', filename='assets/favicon.png') }}" alt="Favicon">
+    </div>
+
+    <div class="container">
+        <div class="title">Bienvenidos, soy Rasgael</div>
+        <div class="subtitle">Tu asistente Virtual</div>
+        <div class="buttons">
+            <button class="btn" onclick="location.href='/informacion'">Información</button>
+            <button class="btn" onclick="location.href='/chat'">Calificaciones</button>
+            <button class="btn" onclick="location.href='/chat'">Chat</button>
+        </div>
+        <button class="btn-primary" onclick="location.href='/chat'">
+            Comenzar
+            <img src="{{ url_for('static', filename='assets/envio.png') }}" alt="Enviar">
+        </button>
+    </div>
+
+    <!-- Pie de página -->
+    <footer class="footer">
+        <p>2025 © RasgaelAI. By Unidad Educativa Particular Rafael Galeth</p>
+    </footer>
+</body>
+</html>

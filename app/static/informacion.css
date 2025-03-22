@@ -1,0 +1,188 @@
+/* filepath: /home/botlord/gunicornDeploy/app/static/informacion.css */
+body {
+    font-family: Arial, sans-serif;
+    background-color: #f0f0f0;
+    margin: 0;
+    padding: 20px;
+    overflow: hidden; /* Evitar el desplazamiento de la página */
+}
+
+.header {
+    width: 100%;
+    background-color: white; /* Cambiar el color del encabezado a blanco */
+    color: #007bff; /* Cambiar el color del texto del encabezado */
+    padding: 10px 0;
+    position: fixed;
+    top: 0;
+    left: 0;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    z-index: 1000;
+}
+
+.header-content {
+    display: flex;
+    justify-content: flex-start; /* Alinear los iconos a la izquierda */
+    align-items: center;
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 0 10px; /* Reducir el padding para pegar más los iconos a la izquierda */
+}
+
+.header-icon {
+    height: 40px;
+    margin-right: 10px; /* Añadir espacio entre los iconos */
+}
+
+.logo-icon {
+    height: 50px;
+}
+
+.icon-container {
+    display: flex;
+    justify-content: center;
+    margin-top: 60px; /* Ajustar el margen superior */
+}
+
+.center-icon {
+    height: 50px; /* Reducir el tamaño del icono */
+    margin-bottom: 10px; /* Añadir margen inferior para acercar al título */
+}
+
+.container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: flex-start; /* Cambiado de center a flex-start */
+    height: 100vh;
+    margin-top: 20px; /* Ajustar este valor según sea necesario */
+    overflow: hidden; /* Evitar el desplazamiento del contenido */
+}
+
+.title {
+    font-size: 24px;
+    font-weight: bold;
+    margin-bottom: 10px;
+    margin-top: 10px; /* Reducir el margen superior */
+}
+
+.subtitle {
+    font-size: 18px;
+    margin-bottom: 10px; /* Reducir el margen inferior */
+}
+
+.buttons {
+    margin-bottom: 10px; /* Reducir el margen inferior para acercar los botones a la ventana de chat */
+}
+
+.buttons .btn {
+    margin: 5px;
+    padding: 10px 20px;
+    font-size: 16px;
+    background-color: #007bff;
+    color: white;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+}
+
+.buttons .btn:hover {
+    background-color: #0056b3;
+}
+
+.chat-window {
+    width: 600px; /* Aumentar el ancho de la ventana de chat */
+    height: 300px; /* Reducir la altura de la ventana de chat */
+    background-color: white;
+    border: 1px solid #ccc;
+    border-radius: 10px; /* Redondear las esquinas */
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1); /* Aumentar la sombra */
+    display: flex;
+    flex-direction: column;
+    position: fixed; /* Hacer la ventana de chat estática */
+    bottom: 80px; /* Ajustar la distancia desde el borde inferior */
+    left: 50%; /* Centrar horizontalmente */
+    transform: translateX(-50%); /* Ajustar la posición para centrar horizontalmente */
+    z-index: 1000; /* Asegura que la ventana de chat esté por encima de otros elementos */
+}
+
+.chat-header {
+    background-color: #007bff;
+    color: white;
+    padding: 1px 1px; /* Reducir el padding para disminuir la altura */
+    border-top-left-radius: 10px; /* Redondear las esquinas */
+    border-top-right-radius: 10px; /* Redondear las esquinas */
+    font-size: 14px; /* Reducir el tamaño de la fuente */
+    text-align: center; /* Centrar el texto */
+}
+
+.chat-body {
+    flex: 1;
+    padding: 15px; /* Aumentar el padding */
+    overflow-y: auto;
+}
+
+.chat-footer {
+    display: flex;
+    padding: 10px;
+    border-top: 1px solid #ccc;
+    width: 100%;
+    box-sizing: border-box;
+}
+
+.chat-footer input {
+    flex-grow: 1;
+    padding: 10px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    margin: 0;
+    height: 36px; /* Ajustar altura para igualar con el botón */
+    box-sizing: border-box;
+}
+
+.chat-footer button {
+    padding: 10px;
+    background-color: #007bff;
+    color: white;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    height: 36px; /* Igual altura que el input */
+    margin-left: 10px; /* Pequeño margen entre input y botón */
+    box-sizing: border-box;
+    white-space: nowrap;
+    width: 100px; /* Tamaño fijo para evitar que se estire demasiado */
+}
+
+.chat-footer button:hover {
+    background-color: #0056b3;
+}
+
+.footer {
+    width: 100%;
+    background-color: white;
+    text-align: center;
+    padding: 10px 0;
+    position: fixed;
+    bottom: 0;
+    left: 0;
+    box-shadow: 0 -2px 4px rgba(0, 0, 0, 0.1);
+}
+
+/* Estilos responsivos */
+@media (max-width: 768px) {
+    .header-content {
+        padding: 0 10px; /* Asegurar que los iconos estén pegados a la izquierda en pantallas pequeñas */
+    }
+
+    .icon-container img {
+        height: 50px; /* Reducir el tamaño del icono en pantallas pequeñas */
+    }
+
+    .chat-window {
+        width: 90%; /* Ajustar el ancho de la ventana de chat en pantallas pequeñas */
+        height: 60%; /* Ajustar la altura de la ventana de chat en pantallas pequeñas */
+        left: 50%; /* Centrar horizontalmente */
+        transform: translateX(-50%); /* Ajustar la posición para centrar horizontalmente */
+        bottom: 80px; /* Ajustar la distancia desde el borde inferior */
+    }
+}

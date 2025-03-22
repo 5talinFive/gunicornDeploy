@@ -1,0 +1,125 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>IA Home</title>
+
+  <script>
+    if (!localStorage.frenify_skin) localStorage.frenify_skin = 'dark';
+    if (!localStorage.frenify_panel) localStorage.frenify_panel = '';
+    document.documentElement.setAttribute("data-techwave-skin", localStorage.frenify_skin);
+    if (localStorage.frenify_panel !== '') {
+      document.documentElement.classList.add(localStorage.frenify_panel);
+    }
+  </script>
+
+  <!-- Google Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Heebo:wght@100;200;300;400;500;600;700;800;900&display=swap" rel="stylesheet">
+
+  <!-- Styles -->
+  <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+  <link rel="stylesheet" href="{{ url_for('static', filename='css/plugins.css') }}">
+</head>
+
+<body>
+
+<div class="techwave_fn_wrapper fn__has_sidebar">
+  <div class="techwave_fn_wrap">
+    <div class="techwave_fn_page">
+      <div class="techwave_fn_aichatbot_page fn__chatbot">
+        <div class="chat__page">
+
+          <!-- Título -->
+          <div class="fn__title_holder">
+            <div class="container">
+              <h1 class="title">Asistente Virtual</h1>
+            </div>
+          </div>
+
+          <!-- Contenedor de mensajes -->
+          <div class="container">
+            <div class="chat__list">
+              <div class="chat__item active" id="chat1">
+                <div id="messages"></div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Área de entrada -->
+          <div class="chat__comment">
+            <div class="container">
+              <div class="fn__chat_comment">
+                <div class="new__chat">
+                  <p>Haz una pregunta o consulta tus calificaciones.</p>
+                </div>
+                <form id="message-form" class="message-form" style="display: flex; gap: 10px;">
+                  <input type="text" id="message" placeholder="Escribe tu mensaje..." required style="flex: 1;">
+                  <button type="submit" id="send-button">
+                    <img src="{{ url_for('static', filename='svg/enter.svg') }}" alt="Enviar">
+                  </button>
+                </form>
+              </div>
+            </div>
+          </div>
+
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Scripts -->
+<script src="{{ url_for('static', filename='js/jquery.js') }}"></script>
+<script src="{{ url_for('static', filename='js/plugins.js') }}"></script>
+<script src="{{ url_for('static', filename='js/init.js') }}"></script>
+
+<!-- Lógica del chat funcional -->
+<script>
+  const form = document.getElementById('message-form');
+  const messagesDiv = document.getElementById('messages');
+
+  form.addEventListener('submit', function(event) {
+    event.preventDefault();
+    const userInput = document.getElementById('message');
+    const userMessage = userInput.value.trim();
+    if (userMessage === "") return;
+
+    // Mostrar mensaje del usuario
+    const userMessageDiv = document.createElement('div');
+    userMessageDiv.classList.add('chat__box', 'your__chat');
+    userMessageDiv.innerHTML = `
+      <div class="author"><span>You</span></div>
+      <div class="chat"><p>${userMessage}</p></div>`;
+    messagesDiv.appendChild(userMessageDiv);
+
+    // Llamada al backend
+    fetch("/send_message", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json"
+      },
+      body: JSON.stringify({ message: userMessage })
+    })
+    .then(response => response.json())
+    .then(data => {
+      const botMessageDiv = document.createElement('div');
+      botMessageDiv.classList.add('chat__box', 'bot__chat');
+      botMessageDiv.innerHTML = `
+        <div class="author"><span>RASGAEL</span></div>
+        <div class="chat"><p>${data.bot_message}</p></div>`;
+      messagesDiv.appendChild(botMessageDiv);
+      messagesDiv.scrollTop = messagesDiv.scrollHeight;
+    })
+    .catch(error => {
+      console.error("Error:", error);
+    });
+
+    userInput.value = "";
+  });
+</script>
+
+</body>
+</html>

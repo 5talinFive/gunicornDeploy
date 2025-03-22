@@ -3,8 +3,8 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Consulta de Calificaciones</title>
-    <link rel="stylesheet" href="{{ url_for('static', filename='styles.css') }}">
+    <title>Información</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='informacion.css') }}">
 </head>
 <body>
     <!-- Encabezado fijo -->
@@ -19,20 +19,33 @@
         </div>
     </header>
 
-    <div class="main-container">
-        <div class="container">
-            <h1>Consulta tus calificaciones aquí</h1>
-            <p></p>
-            <div class="chat-container">
-                <div class="messages" id="messages"></div>
+    <!-- Ícono superior centrado -->
+    <div class="icon-container">
+        <img src="{{ url_for('static', filename='assets/favicon.png') }}" alt="Favicon" class="center-icon">
+    </div>
+
+    <div class="container">
+        <div class="title">Información</div>
+        <div class="subtitle">Aquí puedes encontrar información relevante</div>
+        <div class="buttons">
+            <button class="btn" onclick="location.href='/precios'">Precios</button>
+            <button class="btn" onclick="location.href='/redes-sociales'">Redes Sociales</button>
+            <button class="btn" onclick="location.href='/modalidades'">Modalidades</button>
+            <button class="btn" onclick="location.href='/requisitos'">Requisitos</button>
+        </div>
+        <div class="chat-window">
+            <div class="chat-header">
+                <h2>Chat de Información</h2>
+            </div>
+            <div class="chat-body" id="messages">
+                <!-- Mensajes del chat -->
+            </div>
+            <div class="chat-footer">
                 <form id="message-form" class="message-form">
                     <input type="text" id="message" placeholder="Escribe tu mensaje..." required>
                     <button type="submit">Enviar</button>
                 </form>
             </div>
-        </div>
-        <div class="image-container mobile-image">
-            <img src="{{ url_for('static', filename='assets/rasgaelicon.png') }}" alt="Rasgael Icon">
         </div>
     </div>
 

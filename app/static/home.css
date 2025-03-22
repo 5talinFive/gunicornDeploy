@@ -1,0 +1,201 @@
+body {
+    font-family: Arial, sans-serif;
+    background-color: #e6f0ff;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+    margin: 0;
+}
+
+.header {
+    width: 100%;
+    background-color: white;
+    position: fixed;
+    top: 0;
+    left: 0;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    z-index: 1000;
+}
+
+.header-content {
+    display: flex;
+    align-items: center;
+    padding: 10px 20px;
+}
+
+.header-icon {
+    width: 40px;
+    height: 40px;
+    margin-right: 10px;
+}
+
+.logo-icon {
+    width: 50px; /* Ajusta el tamaño del logocole.png */
+    height: 50px;
+}
+
+.main-container {
+    text-align: center;
+    background-color: #fff;
+    padding: 20px;
+    border-radius: 8px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+}
+
+h1 {
+    margin-bottom: 20px;
+}
+
+.button-container {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    margin-top: 20px;
+}
+
+button {
+    padding: 10px 20px;
+    border: none;
+    border-radius: 4px;
+    background-color: #007bff;
+    color: white;
+    cursor: pointer;
+}
+
+button:hover {
+    background-color: #0056b3;
+}
+
+.start-button {
+    margin-top: 20px;
+    background-color: #28a745;
+}
+
+.start-button:hover {
+    background-color: #218838;
+}
+
+.icon-container {
+    margin-top: 80px; /* Ajustar para que no se solape con el encabezado */
+    margin-bottom: 20px; /* Para solapar ligeramente con la tarjeta */
+}
+
+.icon-container img {
+    width: 60px; /* Ajusta el tamaño del ícono */
+    height: 60px;
+}
+
+.container {
+    text-align: center;
+    background: white;
+    padding: 20px;
+    border-radius: 10px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+    width: 90%;
+    max-width: 600px;
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    height: 100vh;
+}
+
+.container button {
+    margin: 10px;
+    padding: 10px 20px;
+    font-size: 16px;
+}
+
+.title {
+    font-size: 24px;
+    font-weight: bold;
+    margin-bottom: 10px;
+}
+
+.subtitle {
+    font-size: 14px;
+    color: gray;
+    margin-bottom: 20px;
+}
+
+.buttons {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 10px;
+}
+
+.btn {
+    background: white;
+    color: black;
+    border: 2px solid #ccc;
+    padding: 15px 20px;
+    font-size: 18px;
+    border-radius: 10px;
+    cursor: pointer;
+    transition: background 0.3s, border 0.3s;
+    flex: 1;
+    min-width: 150px;
+    max-width: 180px;
+}
+
+.btn:hover {
+    background: #f0f0f0;
+    border-color: #007bff;
+}
+
+.btn-primary {
+    background: #007bff;
+    color: white;
+    border: none;
+    padding: 15px;
+    font-size: 18px;
+    width: 180px; /* Mismo ancho que los botones superiores */
+    margin-top: 20px;
+    border-radius: 30px; /* Bordes redondeados */
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 10px; /* Espacio entre el texto y el icono */
+    cursor: pointer;
+    transition: background 0.3s;
+    margin-left: auto;
+    margin-right: auto; /* Centrado */
+}
+
+.btn-primary img {
+    width: 20px;
+    height: 20px;
+}
+
+.btn-primary:hover {
+    background: #0056b3;
+}
+
+/* Pie de página */
+.footer {
+    width: 100%;
+    background-color: white;
+    text-align: center;
+    padding: 10px 0;
+    position: fixed;
+    bottom: 0;
+    left: 0;
+    box-shadow: 0 -2px 4px rgba(0, 0, 0, 0.1);
+}
+
+.footer p {
+    margin: 0;
+    color: #333;
+    font-size: 14px;
+}
+
+/* Modo móvil: botones en columna */
+@media (max-width: 600px) {
+    .buttons {
+        flex-direction: column;
+    }
+}

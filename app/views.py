@@ -1,8 +1,11 @@
-from flask import Flask, Blueprint, render_template, request, jsonify
-import openai
 import os
+import json
+import re
+from flask import Flask, Blueprint, render_template, request, jsonify, session, redirect, url_for
+import openai
 from dotenv import load_dotenv
 from app.calificaciones import obtener_informacion_estudiante  # Importar la función
+from flask_session import Session
 
 # Cargar variables de entorno
 load_dotenv()
@@ -13,65 +16,86 @@ main = Blueprint('main', __name__)
 # Configurar la API Key de OpenAI
 openai.api_key = os.getenv("OPENAI_API_KEY")
 
-# Mensaje de sistema para definir el comportamiento del asistente
-system_message = {
-    "role": "system",
-    "content": "Eres un asistente virtual llamado Rasgael. Tu función principal es ayudar a los estudiantes a consultar su información. Si el usuario proporciona un número de cédula, debes buscar la información en la base de datos .json y devolver su nombre y enlace."
-}
+# Configurar la sesión
+app.config['SESSION_TYPE'] = 'filesystem'
+Session(app)
 
+# Obtener la ruta absoluta del archivo 8vo_curso.json
+data_path = os.path.join(os.path.dirname(__file__), '8vo_curso.json')
+
+# Cargar datos desde 8vo_curso.json
+try:
+    with open(data_path, 'r') as f:
+        data = json.load(f)
+        if not isinstance(data, dict) or 'estudiantes' not in data:
+            raise ValueError("El archivo JSON no tiene el formato esperado.")
+        data = data['estudiantes']
+        print(f"Datos cargados correctamente: {len(data)} registros encontrados.")
+except (FileNotFoundError, ValueError) as e:
+    print(f"Error: {e}")
+    data = []
+
+# Ruta principal
 @main.route('/')
-def index():
+def home():
+    return render_template('iahome.html')
+
+@main.route('/informacion')
+def informacion():
+    return render_template('informacion.html')
+
+@main.route('/chat')
+def chat():
     return render_template('index.html')
 
 @main.route('/send_message', methods=['POST'])
 def send_message():
-    try:
-        data = request.get_json()
-        user_message = data.get("message", "").strip()
+    user_message = request.json.get('message')
+    response = get_response(user_message)
+    return jsonify({"bot_message": response})
 
-        if not user_message:
-            return jsonify({'bot_message': "Por favor, escribe un mensaje válido."})
+def get_response(message):
+    message = message.lower()
+    
+    # Si el usuario menciona calificaciones o notas, iniciar el proceso
+    if any(word in message for word in ["calificaciones", "notas"]):
+        session['cedula'] = None
+        session['unidad'] = None
+        session['step'] = 1
+        return "Por favor, proporciona tu número de cédula."
 
-        # Inicializar mensajes con el mensaje del sistema
-        messages = [system_message]
+    # Si el proceso está en curso, seguir los pasos
+    if session.get('step') == 1:
+        if re.match(r"^\d{10}$", message):  
+            session['cedula'] = message
+            session['step'] = 2
+            return "Gracias. Ahora, dime la unidad que deseas consultar (Ejemplo: UNIDAD1)."
+        return "El número de cédula debe contener solo 10 dígitos. Inténtalo de nuevo."
 
-        if any(word in user_message.lower() for word in ["calificaciones", "informacion"]):
-            palabras = user_message.split()
-            cedula = next((p for p in palabras if p.isdigit()), None)
+    if session.get('step') == 2:
+        unidad = f'UNIDAD{message}' if not message.upper().startswith('UNIDAD') else message.upper()
+        session['unidad'] = unidad
+        session['step'] = 0  # Resetear el flujo
+        return buscar_calificaciones(session['cedula'], unidad)
+    
+    # Si no es un proceso de calificaciones, responder preguntas generales con OpenAI
+    return responder_pregunta_general(message)
 
-            if cedula:
-                nombre, enlace = obtener_informacion_estudiante(cedula, "8vo_curso")
+def buscar_calificaciones(cedula, unidad):
+    for estudiante in data:
+        if estudiante["id"] == cedula and estudiante["unidad"].upper() == unidad:
+            return f"✅ Hola {estudiante['nombre']}, aquí tienes tus calificaciones: <a href='{estudiante['enlace']}' target='_blank' style='color: blue;'>Ver calificaciones</a>"
+    return f"❌ No se encontraron calificaciones para la cédula {cedula} y la unidad {unidad}."
 
-                if nombre and enlace:
-                    bot_message = f"Hola {nombre}, aquí está tu enlace: <a href='{enlace}' target='_blank' style='color: blue;'>Enlace</a>"
-                else:
-                    bot_message = f"❌ No se encontró el estudiante con cédula {cedula}."
-
-                return jsonify({'bot_message': bot_message})
-
-        # Agregar el mensaje del usuario a la conversación
-        messages.append({'role': 'user', 'content': user_message})
-
-        # Llamar a la API de OpenAI para obtener la respuesta del asistente
-        response = openai.ChatCompletion.create(
-            model="gpt-3.5-turbo",
-            messages=messages,
-            temperature=0
-        )
-        bot_message = response['choices'][0]['message']['content'].strip()
-
-        # Evitar repetir el saludo si el usuario está finalizando la interacción
-        if user_message.lower() in ["gracias", "adios", "hasta luego"]:
-            bot_message = "¡De nada! Si necesitas más ayuda, no dudes en volver. ¡Que tengas un buen día!"
-
-        # Agregar la respuesta del asistente a la conversación
-        messages.append({'role': 'assistant', 'content': bot_message})
-
-        return jsonify({'bot_message': bot_message})
-
-    except Exception as e:
-        print(f"Error: {e}")
-        return jsonify({'bot_message': "Lo siento, hubo un error al procesar tu mensaje."}), 500
+def responder_pregunta_general(message):
+    response = openai.ChatCompletion.create(
+        model="gpt-3.5-turbo",
+        messages=[
+            {"role": "system", "content": "Eres un asistente virtual que responde preguntas generales y ayuda con consultas de calificaciones."},
+            {"role": "user", "content": message}
+        ]
+    )
+    return response['choices'][0]['message']['content']
 
 app.register_blueprint(main)
 
