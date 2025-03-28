@@ -1,9 +1,10 @@
 <!DOCTYPE html>
 <html lang="es">
+
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Rasgael - Asistente Educativo</title>
+  <title>Rasgael - Preguntas Frecuentes</title>
 
   <script>
     if (!localStorage.frenify_skin) localStorage.frenify_skin = 'dark';
@@ -45,7 +46,6 @@
             <img src="{{ url_for('static', filename='svg/arrow.svg') }}" class="fn__svg">
           </a>
         </div>
-
         <div class="leftpanel_content">
           <div class="nav_group">
             <h2 class="group__title">Start Here</h2>
@@ -53,12 +53,14 @@
               <li><a href="{{ url_for('main.home') }}" class="menu__item"><span class="icon"><img src="{{ url_for('static', filename='svg/home.svg') }}" class="fn__svg"></span><span class="text">Home</span></a></li>
             </ul>
           </div>
+
           <div class="nav_group">
             <h2 class="group__title">User Tools</h2>
             <ul class="group__list">
               <li><a href="{{ url_for('main.chat') }}" class="menu__item"><span class="icon"><img src="{{ url_for('static', filename='svg/chat.svg') }}" class="fn__svg"></span><span class="text">AI Chat Bot</span></a></li>
             </ul>
           </div>
+
           <div class="nav_group">
             <h2 class="group__title">Support</h2>
             <ul class="group__list">
@@ -72,102 +74,40 @@
       </div>
       <!-- !Sidebar -->
 
-      <!-- Header -->
-      <div class="techwave_fn_header">
-        <div class="header__right" style="margin-left: auto;">
-          <div class="fn__nav_bar">
-
-            <!-- Fullscreen -->
-            <div class="bar__item bar__item_fullscreen">
-              <a href="#" class="item_opener fn__tooltip" title="Full Screen">
-                <img src="{{ url_for('static', filename='svg/fullscreen.svg') }}" class="fn__svg f_screen" alt="">
-                <img src="{{ url_for('static', filename='svg/smallscreen.svg') }}" class="fn__svg s_screen" alt="">
-              </a>
-            </div>
-
-            <!-- Dark/Light Mode -->
-            <div class="bar__item bar__item_skin">
-              <a href="#" class="item_opener fn__tooltip" title="Dark/Light">
-                <img src="{{ url_for('static', filename='svg/sun.svg') }}" class="fn__svg light_mode" alt="">
-                <img src="{{ url_for('static', filename='svg/moon.svg') }}" class="fn__svg dark_mode" alt="">
-              </a>
-            </div>
-
-            <!-- User Profile -->
-            <div class="bar__item bar__item_user">
-              <a href="#" class="user_opener fn__tooltip" title="User Profile">
-                <img src="{{ url_for('static', filename='img/user/user.jpg') }}" alt="">
-              </a>
-              <div class="item_popup" data-position="right">
-                <div class="user_profile">
-                  <div class="user_img">
-                    <img src="{{ url_for('static', filename='img/user/user.jpg') }}" alt="">
-                  </div>
-                  <div class="user_info">
-                    <h2 class="user_name">Usuario<span>Activo</span></h2>
-                    <p><a href="mailto:correo@ejemplo.com" class="user_email">correo@ejemplo.com</a></p>
-                  </div>
-                </div>
-                <div class="user_nav">
-                  <ul>
-                    <li><a href="#"><span class="icon"><img src="{{ url_for('static', filename='svg/person.svg') }}" class="fn__svg"></span><span class="text">Perfil</span></a></li>
-                    <li><a href="#"><span class="icon"><img src="{{ url_for('static', filename='svg/setting.svg') }}" class="fn__svg"></span><span class="text">Configuración</span></a></li>
-                    <li><a href="{{ url_for('main.logout') }}"><span class="icon"><img src="{{ url_for('static', filename='svg/logout.svg') }}" class="fn__svg"></span><span class="text">Cerrar sesión</span></a></li>
-                  </ul>
-                </div>
-              </div>
-            </div>
-
-          </div>
-        </div>
-      </div>
-      <!-- !Header -->
-
       <!-- Content -->
       <div class="techwave_fn_content">
         <div class="techwave_fn_page">
-          <div class="techwave_fn_home">
-            <div class="section_home">
-              <div class="section_left">
-                <div class="techwave_fn_title_holder">
-                  <h1 class="title">Bienvenido a Rasgael</h1>
-                  <p class="desc">Tu asistente educativo inteligente</p>
-                </div>
-                <div class="techwave_fn_interactive_list">
-                  <ul>
-                    <li>
-                      <div class="item">
-                        <a href="{{ url_for('main.chat') }}">
-                          <span class="icon">
-                            <img src="{{ url_for('static', filename='svg/chat.svg') }}" alt="" class="fn__svg">
-                          </span>
-                          <h2 class="title">Asistente Virtual</h2>
-                          <p class="desc">Consulta tus calificaciones y recibe respuestas a tus preguntas.</p>
-                          <span class="arrow"><img src="{{ url_for('static', filename='svg/arrow.svg') }}" alt="" class="fn__svg"></span>
-                        </a>
-                      </div>
-                    </li>
-                  </ul>
-                </div>
-              </div>
-              <div class="section_right">
-                <div class="company_info">
-                  <img src="{{ url_for('static', filename='img/logo-desktop-full.png') }}" alt="">
-                  <p class="fn__animated_text">Rasgael es tu compañero digital para todo lo relacionado con el colegio Rafael Galeth.</p>
-                  <hr>
-                  <div class="fn__members">
-                    <div class="active item">
-                      <span class="circle"></span>
-                      <span class="text">Activos ahora</span>
+          <div class="techwave_fn_faq_page">
+            <div class="techwave_fn_pagetitle">
+              <h2 class="title">Preguntas Frecuentes</h2>
+            </div>
+
+            <div class="faq">
+              <div class="container small">
+                <div class="techwave_fn_accordion" data-type="accordion">
+                  <div class="acc__item">
+                    <div class="acc__header">
+                      <h2 class="acc__title">¿Cómo funciona?</h2>
+                      <div class="acc__icon"></div>
                     </div>
-                    <div class="item">
-                      <span class="circle"></span>
-                      <span class="text">Estudiantes conectados</span>
+                    <div class="acc__content">
+                      <p>Rasgael es un asistente educativo que te permite consultar calificaciones y hacer preguntas sobre el colegio.</p>
                     </div>
                   </div>
+                  <div class="acc__item">
+                    <div class="acc__header">
+                      <h2 class="acc__title">¿Qué pasa si pierdo acceso?</h2>
+                      <div class="acc__icon"></div>
+                    </div>
+                    <div class="acc__content">
+                      <p>Contacta al soporte del colegio Rafael Galeth para restablecer tu acceso a Rasgael.</p>
+                    </div>
+                  </div>
+                  <!-- Puedes agregar más preguntas aquí -->
                 </div>
               </div>
             </div>
+
           </div>
         </div>
 
@@ -189,4 +129,5 @@
   <script src="{{ url_for('static', filename='js/plugins.js') }}"></script>
   <script src="{{ url_for('static', filename='js/init.js') }}"></script>
 </body>
+
 </html>

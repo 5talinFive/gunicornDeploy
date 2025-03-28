@@ -1,0 +1,115 @@
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Documentación - Rasgael</title>
+
+  <script>
+    if (!localStorage.frenify_skin) localStorage.frenify_skin = 'dark';
+    if (!localStorage.frenify_panel) localStorage.frenify_panel = '';
+    document.documentElement.setAttribute("data-techwave-skin", localStorage.frenify_skin);
+    if (localStorage.frenify_panel !== '') document.documentElement.classList.add(localStorage.frenify_panel);
+  </script>
+
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Heebo:wght@100;200;300;400;500;600;700;800;900&family=Work+Sans:wght@100;200;300;400;500;600;700;800;900&display=swap" rel="stylesheet">
+
+  <link rel="stylesheet" href="{{ url_for('static', filename='css/plugins.css') }}">
+  <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+</head>
+
+<body>
+  <div class="techwave_fn_wrapper fn__has_sidebar">
+    <div class="techwave_fn_wrap">
+
+      {% include 'sidebar.html' %}
+
+      <div class="techwave_fn_content">
+        {% include 'header.html' %}
+
+        <div class="techwave_fn_page">
+          <div class="techwave_fn_doc_page">
+            <div class="docpage">
+              <div class="techwave_fn_pagetitle">
+                <h2 class="title">Documentación</h2>
+              </div>
+              <div class="doccontent">
+                <div class="container small">
+                  <!-- Contenido de secciones como en el template original -->
+                  <div id="doc_introduction">
+                    <h4>Gracias por elegir RASGAEL</h4>
+                    <p>Estimado usuario,</p>
+                    <p>Esta documentación fue generada como ejemplo por un asistente virtual. Le recomendamos adaptarla a sus necesidades específicas.</p>
+                    <p>Contamos con opciones para personalización, integraciones, y despliegue multiplataforma para su experiencia educativa.</p>
+                    <p>Saludos cordiales,<br>Equipo RASGAEL</p>
+                    <h4>Introducción</h4>
+                    <p><b>Visión general:</b> Aprende cómo el asistente educativo Rasgael utiliza procesamiento de lenguaje natural para responder preguntas institucionales.</p>
+                    <p><b>Requisitos:</b> Navegador actualizado, conexión a internet y permisos según el rol de usuario.</p>
+                  </div>
+                  <!-- Secciones adicionales -->
+                  <div id="doc_customization">
+                    <h4>Personalización</h4>
+                    <p>Puede modificar la apariencia y flujo de conversación del chatbot según sus necesidades institucionales.</p>
+                  </div>
+                  <div id="doc_video">
+                    <h4>Tutoriales en video</h4>
+                    <p>Próximamente disponible.</p>
+                  </div>
+                  <div id="doc_darkmode">
+                    <h4>Modo oscuro</h4>
+                    <p>Habilitado por defecto. Puede cambiarlo desde el encabezado de la interfaz.</p>
+                  </div>
+                  <div id="doc_assets">
+                    <h4>Recursos y APIs</h4>
+                    <p>Integración con Google Sheets, Excel y PDF para proporcionar respuestas automatizadas con datos escolares.</p>
+                  </div>
+                  <div id="doc_multidemo">
+                    <h4>Multiplataforma</h4>
+                    <p>Disponible en la web institucional, con posibilidad de integración en Moodle u otras plataformas.</p>
+                  </div>
+                  <div id="doc_structure">
+                    <h4>Estructura de archivos</h4>
+                    <p>El proyecto está organizado con archivos HTML, JS, CSS y Python en el backend con Flask.</p>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <div class="docsidebar">
+              <ul>
+                <li><a href="#doc_introduction">Introducción</a></li>
+                <li class="menu-item-has-children">
+                  <a href="#">Configuración Rápida <span class="trigger"><img src="{{ url_for('static', filename='svg/arrow.svg') }}" alt="" class="fn__svg"></span></a>
+                  <ul class="sub-menu">
+                    <li><a href="#doc_customization"><span class="text">Personalización</span></a></li>
+                    <li><a href="#doc_video"><span class="text">Tutoriales</span></a></li>
+                    <li><a href="#doc_darkmode"><span class="text">Modo Oscuro</span></a></li>
+                  </ul>
+                </li>
+                <li><a href="#doc_assets">Recursos</a></li>
+                <li><a href="#doc_multidemo">Multiplataforma</a></li>
+                <li><a href="#doc_structure">Estructura</a></li>
+              </ul>
+            </div>
+          </div>
+        </div>
+
+        <footer class="techwave_fn_footer">
+          <div class="techwave_fn_footer_content">
+            <div class="copyright">
+              <p>2025© Rasgael | Unidad Educativa Particular Rafael Galeth</p>
+            </div>
+          </div>
+        </footer>
+      </div>
+    </div>
+  </div>
+
+  <script src="{{ url_for('static', filename='js/jquery.js') }}"></script>
+  <script src="{{ url_for('static', filename='js/plugins.js') }}"></script>
+  <script src="{{ url_for('static', filename='js/init.js') }}"></script>
+</body>
+</html>
