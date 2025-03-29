@@ -15,112 +15,77 @@
 
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Heebo:wght@100;200;300;400;500;600;700;800;900&family=Work+Sans:wght@100;200;300;400;500;600;700;800;900&display=swap" rel="stylesheet">
+  <link
+    href="https://fonts.googleapis.com/css2?family=Heebo:wght@100;200;300;400;500;600;700;800;900&family=Work+Sans:wght@100;200;300;400;500;600;700;800;900&display=swap"
+    rel="stylesheet">
 
   <link rel="stylesheet" href="{{ url_for('static', filename='css/plugins.css') }}">
   <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+
+  <style>
+    #messages {
+      display: flex;
+      flex-direction: column;
+      gap: 25px;
+      padding: 20px;
+      max-height: 500px;
+      overflow-y: auto;
+    }
+
+    .chat-message {
+      position: relative;
+      display: flex;
+      flex-direction: column;
+      align-items: flex-start;
+      width: 100%;
+      max-width: 100%;
+    }
+
+    .chat-role {
+      position: absolute;
+      top: -10px;
+      left: 20px;
+      transform: translateY(-50%);
+      background-color: #7e5bef;
+      color: white;
+      font-size: 11px;
+      padding: 2px 8px;
+      border-radius: 12px;
+      font-weight: 600;
+      z-index: 2;
+    }
+
+    .chat-message.bot .chat-role {
+      background-color: #3a3744;
+      color: #ccc;
+    }
+
+    .chat-bubble {
+      background-color: #2e2a38;
+      color: white;
+      padding: 16px 18px;
+      border-radius: 12px;
+      max-width: 85%;
+      width: fit-content;
+      font-size: 15px;
+      margin-left: 10px;
+    }
+
+    .chat-message.bot .chat-bubble {
+      background-color: #1c1a23;
+      color: #ccc;
+    }
+  </style>
+
 </head>
 
 <body>
   <div class="techwave_fn_wrapper fn__has_sidebar">
     <div class="techwave_fn_wrap">
 
-      <!-- Sidebar -->
-      <div class="techwave_fn_leftpanel">
-        <div class="mobile_extra_closer"></div>
+      {% include 'sidebar.html' %}
+      {% include 'header.html' %}
 
-        <div class="leftpanel_logo">
-          <a href="{{ url_for('main.home') }}" class="fn_logo">
-            <span class="full_logo">
-              <img src="{{ url_for('static', filename='img/logo-desktop-full.png') }}" class="desktop_logo">
-              <img src="{{ url_for('static', filename='img/logo-retina-full.png') }}" class="retina_logo">
-            </span>
-            <span class="short_logo">
-              <img src="{{ url_for('static', filename='img/logo-desktop-mini.png') }}" class="desktop_logo">
-              <img src="{{ url_for('static', filename='img/logo-retina-mini.png') }}" class="retina_logo">
-            </span>
-          </a>
-          <a href="#" class="fn__closer fn__icon_button desktop_closer">
-            <img src="{{ url_for('static', filename='svg/arrow.svg') }}" class="fn__svg">
-          </a>
-          <a href="#" class="fn__closer fn__icon_button mobile_closer">
-            <img src="{{ url_for('static', filename='svg/arrow.svg') }}" class="fn__svg">
-          </a>
-        </div>
-
-        <div class="leftpanel_content">
-          <div class="nav_group">
-            <h2 class="group__title">Start Here</h2>
-            <ul class="group__list">
-              <li><a href="{{ url_for('main.home') }}" class="menu__item"><span class="icon"><img src="{{ url_for('static', filename='svg/home.svg') }}" class="fn__svg"></span><span class="text">Home</span></a></li>
-            </ul>
-          </div>
-
-          <div class="nav_group">
-            <h2 class="group__title">User Tools</h2>
-            <ul class="group__list">
-              <li><a href="{{ url_for('main.chat') }}" class="menu__item"><span class="icon"><img src="{{ url_for('static', filename='svg/chat.svg') }}" class="fn__svg"></span><span class="text">AI Chat Bot</span></a></li>
-            </ul>
-          </div>
-
-          <div class="nav_group">
-            <h2 class="group__title">Support</h2>
-            <ul class="group__list">
-              <li><a href="{{ url_for('main.faq') }}" class="menu__item"><span class="icon"><img src="{{ url_for('static', filename='svg/question.svg') }}" class="fn__svg"></span><span class="text">FAQ & Help</span></a></li>
-              <li><a href="{{ url_for('main.documentacion') }}" class="menu__item"><span class="text">Documentación</span></a></li>
-              <li><a href="{{ url_for('main.contacto') }}" class="menu__item"><span class="text">Contacto</span></a></li>
-              <li><a href="{{ url_for('main.logout') }}" class="menu__item"><span class="icon"><img src="{{ url_for('static', filename='svg/logout.svg') }}" class="fn__svg"></span><span class="text">Log Out</span></a></li>
-            </ul>
-          </div>
-        </div>
-      </div>
-      <!-- !Sidebar -->
-
-      <!-- Header -->
-      <div class="techwave_fn_header">
-        <div class="header__right" style="margin-left: auto;">
-          <div class="fn__nav_bar">
-            <div class="bar__item bar__item_fullscreen">
-              <a href="#" class="item_opener fn__tooltip" title="Full Screen">
-                <img src="{{ url_for('static', filename='svg/fullscreen.svg') }}" class="fn__svg f_screen" alt="">
-                <img src="{{ url_for('static', filename='svg/smallscreen.svg') }}" class="fn__svg s_screen" alt="">
-              </a>
-            </div>
-            <div class="bar__item bar__item_skin">
-              <a href="#" class="item_opener fn__tooltip" title="Dark/Light">
-                <img src="{{ url_for('static', filename='svg/sun.svg') }}" class="fn__svg light_mode" alt="">
-                <img src="{{ url_for('static', filename='svg/moon.svg') }}" class="fn__svg dark_mode" alt="">
-              </a>
-            </div>
-            <div class="bar__item bar__item_user">
-              <a href="#" class="user_opener fn__tooltip" title="User Profile">
-                <img src="{{ url_for('static', filename='img/user/user.jpg') }}" alt="">
-              </a>
-              <div class="item_popup" data-position="right">
-                <div class="user_profile">
-                  <div class="user_img">
-                    <img src="{{ url_for('static', filename='img/user/user.jpg') }}" alt="">
-                  </div>
-                  <div class="user_info">
-                    <h2 class="user_name">Usuario<span>Activo</span></h2>
-                    <p><a href="mailto:correo@ejemplo.com" class="user_email">correo@ejemplo.com</a></p>
-                  </div>
-                </div>
-                <div class="user_nav">
-                  <ul>
-                    <li><a href="#"><span class="icon"><img src="{{ url_for('static', filename='svg/person.svg') }}" class="fn__svg"></span><span class="text">Perfil</span></a></li>
-                    <li><a href="#"><span class="icon"><img src="{{ url_for('static', filename='svg/setting.svg') }}" class="fn__svg"></span><span class="text">Configuración</span></a></li>
-                    <li><a href="{{ url_for('main.logout') }}"><span class="icon"><img src="{{ url_for('static', filename='svg/logout.svg') }}" class="fn__svg"></span><span class="text">Cerrar sesión</span></a></li>
-                  </ul>
-                </div>
-              </div>
-            </div>
-          </div>
-        </div>
-      </div>
-      <!-- !Header -->
-
-      <!-- Content -->
       <div class="techwave_fn_content">
         <div class="techwave_fn_page">
           <div class="techwave_fn_aichatbot_page fn__chatbot">
@@ -139,13 +104,18 @@
                 <div class="container">
                   <div class="fn__chat_comment">
                     <form id="message-form" class="message-form">
-                      <input type="text" id="message" placeholder="Send a message..." required>
-                      <button type="submit"><img src="{{ url_for('static', filename='svg/enter.svg') }}" alt="Enviar"></button>
+                      <div class="entry__wrapper">
+                        <input type="text" id="message" placeholder="Send a message..." required>
+                        <button type="submit" class="send__button">
+                          <img src="{{ url_for('static', filename='svg/enter.svg') }}" alt="Enviar">
+                        </button>
+                      </div>
                     </form>
                   </div>
                 </div>
               </div>
             </div>
+
             <div class="chat__sidebar">
               <div class="sidebar_header">
                 <a href="#" class="fn__new_chat_link">
@@ -157,10 +127,18 @@
                 <div class="chat__group new">
                   <h2 class="group__title">TODAY</h2>
                   <ul class="group__list">
-                    <li class="group__item"><div class="fn__chat_link active"><span class="text">Chat Bot Definition</span></div></li>
-                    <li class="group__item"><div class="fn__chat_link"><span class="text">Essay: Marketing</span></div></li>
-                    <li class="group__item"><div class="fn__chat_link"><span class="text">Future of Social Media</span></div></li>
-                    <li class="group__item"><div class="fn__chat_link"><span class="text">Business Ideas</span></div></li>
+                    <li class="group__item">
+                      <div class="fn__chat_link active"><span class="text">Chat Bot Definition</span></div>
+                    </li>
+                    <li class="group__item">
+                      <div class="fn__chat_link"><span class="text">Essay: Marketing</span></div>
+                    </li>
+                    <li class="group__item">
+                      <div class="fn__chat_link"><span class="text">Future of Social Media</span></div>
+                    </li>
+                    <li class="group__item">
+                      <div class="fn__chat_link"><span class="text">Business Ideas</span></div>
+                    </li>
                   </ul>
                 </div>
               </div>
@@ -175,12 +153,9 @@
           </div>
         </footer>
       </div>
-      <!-- !Content -->
-
     </div>
   </div>
 
-  <!-- Scripts -->
   <script src="{{ url_for('static', filename='js/jquery.js') }}"></script>
   <script src="{{ url_for('static', filename='js/plugins.js') }}"></script>
   <script src="{{ url_for('static', filename='js/init.js') }}"></script>
@@ -189,37 +164,49 @@
     const form = document.getElementById('message-form');
     const messagesDiv = document.getElementById('messages');
 
+    function appendMessage(role, text) {
+      const wrapper = document.createElement('div');
+      wrapper.classList.add('chat-message', role);
+
+      const label = document.createElement('div');
+      label.classList.add('chat-role');
+      label.textContent = role === 'user' ? 'TÚ' : 'Rasgael';
+
+      const bubble = document.createElement('div');
+      bubble.classList.add('chat-bubble');
+      bubble.innerHTML = text;
+
+      wrapper.appendChild(label);
+      wrapper.appendChild(bubble);
+      messagesDiv.appendChild(wrapper);
+      messagesDiv.scrollTop = messagesDiv.scrollHeight;
+    }
+
     form.addEventListener('submit', function (event) {
       event.preventDefault();
-      const userMessage = document.getElementById('message').value.trim();
+      const input = document.getElementById('message');
+      const userMessage = input.value.trim();
       if (userMessage === "") return;
 
-      const userMessageDiv = document.createElement('div');
-      userMessageDiv.classList.add('user-message');
-      userMessageDiv.textContent = userMessage;
-      messagesDiv.appendChild(userMessageDiv);
+      appendMessage('user', userMessage);
 
       fetch("/send_message", {
         method: "POST",
-        headers: {
-          "Content-Type": "application/json"
-        },
+        headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ message: userMessage })
       })
         .then(response => response.json())
         .then(data => {
-          const botMessageDiv = document.createElement('div');
-          botMessageDiv.classList.add('bot-message');
-          botMessageDiv.innerHTML = data.bot_message;
-          messagesDiv.appendChild(botMessageDiv);
-          messagesDiv.scrollTop = messagesDiv.scrollHeight;
+          appendMessage('bot', data.bot_message);
         })
         .catch(error => {
           console.error("Error:", error);
         });
 
-      document.getElementById('message').value = "";
+      input.value = "";
     });
   </script>
+
 </body>
+
 </html>

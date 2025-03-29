@@ -1,0 +1,42 @@
+<div class="techwave_fn_header">
+    <div class="header__right" style="margin-left: auto;">
+      <div class="fn__nav_bar">
+        <div class="bar__item bar__item_fullscreen">
+          <a href="#" class="item_opener fn__tooltip" title="Full Screen">
+            <img src="{{ url_for('static', filename='svg/fullscreen.svg') }}" class="fn__svg f_screen" alt="">
+            <img src="{{ url_for('static', filename='svg/smallscreen.svg') }}" class="fn__svg s_screen" alt="">
+          </a>
+        </div>
+        <div class="bar__item bar__item_skin">
+          <a href="#" class="item_opener fn__tooltip" title="Dark/Light">
+            <img src="{{ url_for('static', filename='svg/sun.svg') }}" class="fn__svg light_mode" alt="">
+            <img src="{{ url_for('static', filename='svg/moon.svg') }}" class="fn__svg dark_mode" alt="">
+          </a>
+        </div>
+        <div class="bar__item bar__item_user">
+          <a href="#" class="user_opener fn__tooltip" title="User Profile">
+            <img src="{{ url_for('static', filename='img/user/user.jpg') }}" alt="">
+          </a>
+          <div class="item_popup" data-position="right">
+            <div class="user_profile">
+              <div class="user_img">
+                <img src="{{ url_for('static', filename='img/user/user.jpg') }}" alt="">
+              </div>
+              <div class="user_info">
+                <h2 class="user_name">Usuario<span>Activo</span></h2>
+                <p><a href="mailto:correo@ejemplo.com" class="user_email">correo@ejemplo.com</a></p>
+              </div>
+            </div>
+            <div class="user_nav">
+              <ul>
+                <li><a href="#"><span class="icon"><img src="{{ url_for('static', filename='svg/person.svg') }}" class="fn__svg"></span><span class="text">Perfil</span></a></li>
+                <li><a href="#"><span class="icon"><img src="{{ url_for('static', filename='svg/setting.svg') }}" class="fn__svg"></span><span class="text">Configuración</span></a></li>
+                <li><a href="{{ url_for('main.logout') }}"><span class="icon"><img src="{{ url_for('static', filename='svg/logout.svg') }}" class="fn__svg"></span><span class="text">Cerrar sesión</span></a></li>
+              </ul>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  
