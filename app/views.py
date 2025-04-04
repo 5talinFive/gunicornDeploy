@@ -30,7 +30,8 @@ CRED_PATH = os.path.join(os.path.dirname(__file__), 'credenciales_google.json')
 # Conectar con Google Sheets
 def obtener_hoja_service():
     creds = service_account.Credentials.from_service_account_file(
-        CRED_PATH, scopes=["https://www.googleapis.com/auth/spreadsheets.readonly"]
+        CRED_PATH = os.getenv('GOOGLE_APPLICATION_CREDENTIALS')
+
     )
     service = build('sheets', 'v4', credentials=creds)
     sheet = service.spreadsheets()
