@@ -25,7 +25,8 @@ Session(app)
 SHEET_ID = "16_q09WPajV5ju5vyQlufRyq3mibZ6ADVIsRh3oILlrQ"
 RANGO_INFO = "INFORG!A2:B"
 RANGO_NOTAS = "CALIFICACIONESINTENSIVO!A2:C"
-CRED_PATH = os.getenv('GOOGLE_APPLICATION_CREDENTIALS')
+# CRED_PATH = os.path.join(os.path.dirname(__file__), 'credenciales_google.json')
+CRED_PATH = '/etc/secrets/GOOGLE_APPLICATION_CREDENTIALS'
 
 
 # Conectar con Google Sheets
