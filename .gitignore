@@ -10,6 +10,10 @@ __pycache__/
 # Entorno virtual
 venv/
 
+*.env
+credenciales_google.json
+
+
 # Archivos de configuración de entorno
 .env
 

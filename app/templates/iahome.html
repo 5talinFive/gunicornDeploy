@@ -2,8 +2,8 @@
 <html lang="es">
 
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Rasgael AI Chat</title>
 
   <script>
@@ -13,14 +13,14 @@
     if (localStorage.frenify_panel !== '') document.documentElement.classList.add(localStorage.frenify_panel);
   </script>
 
-  <link rel="preconnect" href="https://fonts.googleapis.com">
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
   <link
     href="https://fonts.googleapis.com/css2?family=Heebo:wght@100;200;300;400;500;600;700;800;900&family=Work+Sans:wght@100;200;300;400;500;600;700;800;900&display=swap"
-    rel="stylesheet">
+    rel="stylesheet" />
 
-  <link rel="stylesheet" href="{{ url_for('static', filename='css/plugins.css') }}">
-  <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+  <link rel="stylesheet" href="{{ url_for('static', filename='css/plugins.css') }}" />
+  <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}" />
 
   <style>
     #messages {
@@ -76,13 +76,11 @@
       color: #ccc;
     }
   </style>
-
 </head>
 
 <body>
   <div class="techwave_fn_wrapper fn__has_sidebar">
     <div class="techwave_fn_wrap">
-
       {% include 'sidebar.html' %}
       {% include 'header.html' %}
 
@@ -92,7 +90,7 @@
             <div class="chat__page">
               <div class="fn__title_holder">
                 <div class="container">
-                  <h1 class="title">Chat Bot Definition</h1>
+                  <h1 class="title">Bienvenidos !!</h1>
                 </div>
               </div>
               <div class="container">
@@ -105,9 +103,9 @@
                   <div class="fn__chat_comment">
                     <form id="message-form" class="message-form">
                       <div class="entry__wrapper">
-                        <input type="text" id="message" placeholder="Send a message..." required>
+                        <input type="text" id="message" placeholder="Envía un mensaje..." required />
                         <button type="submit" class="send__button">
-                          <img src="{{ url_for('static', filename='svg/enter.svg') }}" alt="Enviar">
+                          <img src="{{ url_for('static', filename='svg/enter.svg') }}" alt="Enviar" />
                         </button>
                       </div>
                     </form>
@@ -120,24 +118,21 @@
               <div class="sidebar_header">
                 <a href="#" class="fn__new_chat_link">
                   <span class="icon">+</span>
-                  <span class="text">NEW CHAT</span>
+                  <span class="text">NUEVO CHAT</span>
                 </a>
               </div>
               <div class="sidebar_content">
                 <div class="chat__group new">
-                  <h2 class="group__title">TODAY</h2>
+                  <h2 class="group__title">FRECUENTES</h2>
                   <ul class="group__list">
                     <li class="group__item">
-                      <div class="fn__chat_link active"><span class="text">Chat Bot Definition</span></div>
+                      <div class="fn__chat_link active"><span class="text">Calificaciones</span></div>
                     </li>
                     <li class="group__item">
-                      <div class="fn__chat_link"><span class="text">Essay: Marketing</span></div>
+                      <div class="fn__chat_link"><span class="text">Información</span></div>
                     </li>
                     <li class="group__item">
-                      <div class="fn__chat_link"><span class="text">Future of Social Media</span></div>
-                    </li>
-                    <li class="group__item">
-                      <div class="fn__chat_link"><span class="text">Business Ideas</span></div>
+                      <div class="fn__chat_link"><span class="text">Docentes</span></div>
                     </li>
                   </ul>
                 </div>
@@ -145,6 +140,7 @@
             </div>
           </div>
         </div>
+
         <footer class="techwave_fn_footer">
           <div class="techwave_fn_footer_content">
             <div class="copyright">
@@ -174,7 +170,7 @@
 
       const bubble = document.createElement('div');
       bubble.classList.add('chat-bubble');
-      bubble.innerHTML = text;
+      bubble.innerHTML = text || '⚠️ Sin respuesta del asistente.';
 
       wrapper.appendChild(label);
       wrapper.appendChild(bubble);
@@ -201,12 +197,12 @@
         })
         .catch(error => {
           console.error("Error:", error);
+          appendMessage('bot', '❌ Error al procesar la respuesta.');
         });
 
       input.value = "";
     });
   </script>
-
 </body>
 
 </html>

@@ -1,5 +1,9 @@
 {
   "2200511240": "https://drive.google.com/file/d/19yRcUJmLhhqnWyEyZAhnjb0cYLhAX18e/view?usp=drivesdk",
+  
+  "acerca del colegio": "📘 El Colegio Rafael Galeth es una institución educativa ubicada en El Coca Orellana Ecuador. Ofrecemos educación de calidad desde nivel inicial hasta bachillerato, con modalidad 100% virtual para la región sierra, costa y pcei, además de formación en valores.",
+
+
   "Heading": "Content",
   "Edades permitidas para estudiar Básica Superior:": "💡Para poder estudiar la Básica Superiro es importante tener 15 años en adelante, menores de 15 años no pueden estudiar en esta modalidad de estudio virtual intensivo.",
   "Edades permitidas para estudiar el Bachillerato:": "💡Para poder estudiar el Bachillerato es importante tener 18 años en adelante, menores de 18 años no pueden estudiar en esta modalidad de estudio virtual intensivo.",
@@ -34,5 +38,28 @@
   "¿Cúales son las redes sociales del colegio?": "La redes sociales del colegio son las siguientes: Facebook: https://www.facebook.com/colegiorafaelgaleth Instagram: https://www.instagram.com/colegiopceirafaelgaleth Tik Tok: https://www.tiktok.com/@rafaelgalethmatriz",
   "¿Existen descuentos u ofertas especiales?": "El prospecto podrá obtener un descuento del 10% sobre el valor total del período académico si realiza el pago anticipado de la matrícula y las mensualidades.",
   "¿Posee convenios institucionales?": "El Colegio Rafael Galeth posee convenios de educación superior con el Instituto Técnológico Bolivario ITB ( https://itb.edu.ec ) de la ciudad de Guayaquil, Conduce Ecuador ( https://conducecuador.itb.edu.ec ) y la Universidad Bolivariana del Ecuado UBE ( https://ube.edu.ec ).",
-  "Docentes/Profesores del colerio Rafael Galeth modalidad Instensiva": "Ing. Roxana Vélez: Lenguaje y Literatura. Ing. Wendy Charfuelan: Ciencias Naturales. Lic. Mileidy Trujillo: Estudios Sociales. Tlgo. Stalin Sarango: Informática. Lic. Adriana Roda:  Inglés. Ing. Rocio Rezabala: Matemáticas."
+  "Docentes/Profesores del colerio Rafael Galeth modalidad Instensiva": "Ing. Roxana Vélez: Lenguaje y Literatura. Ing. Wendy Charfuelan: Ciencias Naturales. Lic. Mileidy Trujillo: Estudios Sociales. Tlgo. Stalin Sarango: Informática. Lic. Adriana Roda:  Inglés. Ing. Rocio Rezabala: Matemáticas.",
+  "Matemáticas": "Ing. Rocio Rezabala: Matemáticas.",
+  "Lenguaje y Literatura": "Ing. Roxana Vélez: Lenguaje y Literatura.",
+  "Ciencias Naturales": "Ing. Wendy Charfuelan: Ciencias Naturales.",
+  "Estudios Sociales": "Lic. Mileidy Trujillo: Estudios Sociales.",
+  "Informática": "Ing. Kelvin Jaramilo: Ingles.",
+  "Inglés": "Lic. Adriana Roda: Inglés.",
+  "¿Qué es el programa de participación estudiantil?": "El programa de participación estudiantil es un programa que permite a los estudiantes participar en actividades extracurriculares, como deportes, arte, cultura y voluntariado. Este programa tiene como objetivo fomentar el desarrollo integral de los estudiantes y promover su participación activa en la comunidad.",
+  "¿Qué es el campo de acción?": "El campo de acción es un programa que permite a los estudiantes participar en actividades extracurriculares, como deportes, arte, cultura y voluntariado. Este programa tiene como objetivo fomentar el desarrollo integral de los estudiantes y promover su participación activa en la comunidad.",
+  "¿Qué es el examen de ubicación?": "El examen de ubicación es una evaluación que se realiza a los estudiantes para determinar su nivel académico y asignarles el curso correspondiente. Este examen se aplica a los estudiantes que no cuentan con la documentación completa o que han cursado estudios en instituciones educativas no reconocidas por el Ministerio de Educación.",
+  "¿Qué es la homologación de estudios?": "La homologación de estudios es el proceso mediante el cual se reconoce oficialmente un título o certificado de estudios obtenido en una institución educativa extranjera. Este proceso se realiza a través del Ministerio de Educación y permite al estudiante continuar sus estudios en el país.",
+
+  "docentes": [
+    {
+      "nombre": "Luis Pérez",
+      "materia": "Matemáticas",
+      "info": "Es profesor desde hace 10 años. Le apasiona el álgebra."
+    },
+    {
+      "nombre": "Ana Torres",
+      "materia": "Lengua y Literatura",
+      "info": "Encargada de 8vo y 9no. Especialista en redacción."
+    }
+  ]
 }

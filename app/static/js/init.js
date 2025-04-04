@@ -1778,3 +1778,110 @@ var FrenifyTechWaveTime = new Date();
 	});
   	
 })(jQuery);
+
+
+
+//funcion para botones de opcines de chatbot
+// Detectar clic en opciones del sidebar
+document.addEventListener('DOMContentLoaded', function () {
+	const opciones = document.querySelectorAll('.fn__chat_link');
+  
+	opciones.forEach(opcion => {
+	  opcion.addEventListener('click', function () {
+		const texto = this.innerText.trim().toLowerCase();
+  
+		if (texto === 'calificaciones') {
+		  iniciarFlujo('calificaciones');
+		} else if (texto === 'información') {
+		  iniciarFlujo('informacion');
+		} else if (texto === 'docentes') {
+		  iniciarFlujo('docentes');
+		}
+	  });
+	});
+  });
+  
+  // Control del flujo
+  let estadoConversacion = null;
+  
+  function iniciarFlujo(tipo) {
+	if (tipo === 'calificaciones') {
+	  estadoConversacion = 'calificaciones';
+	  appendMessage('bot', 'Por favor, proporciona tu número de cédula (10 dígitos).');
+	} else if (tipo === 'informacion') {
+	  estadoConversacion = 'informacion';
+	  appendMessage('bot', '¿Qué información institucional necesitas saber?');
+	} else if (tipo === 'docentes') {
+	  estadoConversacion = 'docentes';
+	  appendMessage('bot', '¿Sobre qué docente o materia deseas obtener información?');
+	}
+  }
+
+  
+
+  //funcionalidad para los botones 
+  let flujoActivo = false;
+
+document.addEventListener('DOMContentLoaded', function () {
+  const opciones = document.querySelectorAll('.fn__chat_link');
+
+  opciones.forEach(opcion => {
+    opcion.addEventListener('click', handleBoton);
+  });
+
+  const nuevoChatBtn = document.querySelector('.fn__new_chat_link');
+  const messagesDiv = document.getElementById('messages');
+
+  if (nuevoChatBtn && messagesDiv) {
+    nuevoChatBtn.addEventListener('click', function (e) {
+      e.preventDefault();
+      messagesDiv.innerHTML = '';
+      flujoActivo = false;
+      sessionStorage.clear();
+      appendMessage('bot', '🧠 Nuevo chat iniciado. ¿En qué puedo ayudarte?');
+    });
+  }
+});
+
+function handleBoton(event) {
+  if (flujoActivo) return;
+  const texto = (this.innerText || "").trim().toLowerCase();
+
+  if (["calificaciones", "información", "docentes"].includes(texto)) {
+    iniciarFlujo(texto);
+  }
+}
+
+function iniciarFlujo(tipo) {
+  if (flujoActivo) return;
+  flujoActivo = true;
+
+  fetch("/send_message", {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify({ message: tipo, auto: true })
+  })
+    .then(response => response.json())
+    .then(data => {
+      appendMessage('bot', data.bot_message);
+      flujoActivo = false;
+    })
+    .catch(error => {
+      console.error("Error:", error);
+      flujoActivo = false;
+    });
+}
+
+
+  
+  
+
+
+  
+
+
+
+
+
+
+
