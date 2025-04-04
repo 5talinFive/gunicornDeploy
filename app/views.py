@@ -25,13 +25,13 @@ Session(app)
 SHEET_ID = "16_q09WPajV5ju5vyQlufRyq3mibZ6ADVIsRh3oILlrQ"
 RANGO_INFO = "INFORG!A2:B"
 RANGO_NOTAS = "CALIFICACIONESINTENSIVO!A2:C"
-CRED_PATH = os.path.join(os.path.dirname(__file__), 'credenciales_google.json')
+CRED_PATH = os.getenv('GOOGLE_APPLICATION_CREDENTIALS')
+
 
 # Conectar con Google Sheets
 def obtener_hoja_service():
     creds = service_account.Credentials.from_service_account_file(
-        CRED_PATH = os.getenv('GOOGLE_APPLICATION_CREDENTIALS')
-
+        CRED_PATH, scopes=["https://www.googleapis.com/auth/spreadsheets.readonly"]
     )
     service = build('sheets', 'v4', credentials=creds)
     sheet = service.spreadsheets()
