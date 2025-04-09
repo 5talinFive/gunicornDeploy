@@ -707,14 +707,14 @@ frenify_typing span {
 /* TAMAÑOS DE LOGO */
 .desktop_logo,
 .retina_logo {
-  max-height: 40px; /* Puedes ajustar este valor (por defecto suele ser 50px o más) */
+  max-height: 100px; /* Puedes ajustar este valor (por defecto suele ser 50px o más) */
   height: auto;
   width: auto;
 }
 
 /* Reducción de tamaño solo para el logo dentro de .company_info */
 .company_info img {
-	max-height: 50px; /* O puedes probar con 40px o incluso 35px */
+	max-height: 100px; /* O puedes probar con 40px o incluso 35px */
 	height: auto;
 	width: auto;
   }

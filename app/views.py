@@ -25,6 +25,7 @@ Session(app)
 SHEET_ID = "16_q09WPajV5ju5vyQlufRyq3mibZ6ADVIsRh3oILlrQ"
 RANGO_INFO = "INFORG!A2:B"
 RANGO_NOTAS = "CALIFICACIONESINTENSIVO!A2:C"
+RANGO_EMPRESAS = "CALIFICACIONESINTENSIVO!A2:D"
 # CRED_PATH = os.path.join(os.path.dirname(__file__), 'credenciales_google.json')
 CRED_PATH = '/etc/secrets/GOOGLE_APPLICATION_CREDENTIALS'
 
@@ -50,6 +51,26 @@ def obtener_informacion_general():
     result = sheet.values().get(spreadsheetId=SHEET_ID, range=RANGO_INFO).execute()
     valores = result.get('values', [])
     return {fila[0].strip().lower(): fila[1].strip() for fila in valores if len(fila) >= 2}
+
+# Leer datos de empresas
+def obtener_datos_empresas():
+    sheet = obtener_hoja_service()
+    result = sheet.values().get(spreadsheetId=SHEET_ID, range=RANGO_EMPRESAS).execute()
+    valores = result.get('values', [])
+
+    datos = []
+    for fila in valores:
+        empresa = fila[0] if len(fila) > 0 else ""
+        cantidad = fila[1] if len(fila) > 1 else "0"
+        valor_plan = fila[2] if len(fila) > 2 else "$0,00"
+        pautaje = fila[3] if len(fila) > 3 else "$0,00"
+        datos.append({
+            "empresa": empresa,
+            "cantidad": cantidad,
+            "valor_plan": valor_plan,
+            "pautaje": pautaje
+        })
+    return datos
 
 # RUTAS
 @main.route('/')
@@ -117,7 +138,7 @@ def get_response(message):
         else:
             if not re.search(r"\d{5,}", message):
                 session['step'] = 0
-                return responder_info_colegio(message) or responder_pregunta_general(message)
+                return responder_info_colegio(message) or responder_info_empresas(message) or responder_pregunta_general(message)
             return "❌ El número de cédula debe contener solo 10 dígitos. Inténtalo de nuevo."
 
     if session.get('step') == 2:
@@ -129,15 +150,20 @@ def get_response(message):
         session['step'] = 0
         return buscar_calificaciones(session['cedula'], unidad)
 
-    # 🔍 Buscar información institucional
+    # Buscar información institucional
     respuesta_info = responder_info_colegio(message)
     if respuesta_info:
         return respuesta_info
 
-    # 💬 Si no se encuentra nada, usar modelo
+    # Buscar información de empresas
+    respuesta_empresa = responder_info_empresas(message)
+    if respuesta_empresa:
+        return respuesta_empresa
+
+    # Usar modelo IA como fallback
     return responder_pregunta_general(message)
 
-# Buscar en calificaciones
+# Buscar calificaciones por cédula y unidad
 def buscar_calificaciones(cedula, unidad):
     if not cedula or not unidad:
         return "❌ Faltan datos para buscar las calificaciones."
@@ -146,10 +172,6 @@ def buscar_calificaciones(cedula, unidad):
 
     cedula = cedula.strip()
     unidad = unidad.strip().upper()
-
-    print("📄 Calificaciones cargadas:")
-    for fila in filas:
-        print(fila)
 
     for fila in filas:
         if len(fila) >= 3:
@@ -160,7 +182,7 @@ def buscar_calificaciones(cedula, unidad):
 
     return f"❌ No se encontraron calificaciones para la cédula {cedula} y la unidad {unidad}."
 
-# Buscar mejor coincidencia institucional
+# Buscar información institucional
 def responder_info_colegio(message):
     datos = obtener_informacion_general()
     message_lower = message.lower()
@@ -175,7 +197,28 @@ def responder_info_colegio(message):
 
     return None
 
-# Chat IA con GPT
+# Buscar información de empresas
+def responder_info_empresas(message):
+    datos = obtener_datos_empresas()
+    message = message.lower()
+
+    nombres_empresas = [dato['empresa'].lower() for dato in datos]
+    coincidencias = difflib.get_close_matches(message, nombres_empresas, n=1, cutoff=0.5)
+
+    if coincidencias:
+        empresa_nombre = coincidencias[0]
+        for empresa in datos:
+            if empresa['empresa'].lower() == empresa_nombre:
+                return (
+                    f"📊 Empresa: {empresa['empresa']}\n"
+                    f"📦 Cantidad: {empresa['cantidad']}\n"
+                    f"💰 Valor del Plan: {empresa['valor_plan']}\n"
+                    f"📈 Pautaje: {empresa['pautaje']}"
+                )
+
+    return None
+
+# Usar GPT para preguntas generales
 def responder_pregunta_general(message):
     try:
         response = openai.ChatCompletion.create(
@@ -183,7 +226,7 @@ def responder_pregunta_general(message):
             messages=[
                 {
                     "role": "system",
-                    "content": "Eres RASGAEL, un asistente educativo útil y amable. Si no tienes datos del Colegio Rafael Galeth, responde con base en tu conocimiento general."
+                    "content": "Eres FARUM, un asistente creativo útil y amable. Si no tienes datos de FARUM, responde con base en tu conocimiento general."
                 },
                 {"role": "user", "content": message}
             ]
