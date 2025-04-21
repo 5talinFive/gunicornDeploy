@@ -15,9 +15,7 @@
 
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-  <link
-    href="https://fonts.googleapis.com/css2?family=Heebo:wght@100;200;300;400;500;600;700;800;900&family=Work+Sans:wght@100;200;300;400;500;600;700;800;900&display=swap"
-    rel="stylesheet" />
+  <link href="https://fonts.googleapis.com/css2?family=Heebo:wght@100;200;300;400;500;600;700;800;900&family=Work+Sans:wght@100;200;300;400;500;600;700;800;900&display=swap" rel="stylesheet" />
 
   <link rel="stylesheet" href="{{ url_for('static', filename='css/plugins.css') }}" />
   <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}" />
@@ -93,18 +91,20 @@
                   <h1 class="title">Bienvenidos !!</h1>
                 </div>
               </div>
+
               <div class="container">
                 <div class="chat__list">
                   <div class="messages" id="messages"></div>
                 </div>
               </div>
+
               <div class="chat__comment">
                 <div class="container">
                   <div class="fn__chat_comment">
                     <form id="message-form" class="message-form">
                       <div class="entry__wrapper">
-                        <input type="text" id="message" placeholder="Envía un mensaje..." required />
-                        <button type="submit" class="send__button">
+                        <input type="text" id="message" placeholder="Envía un mensaje..." required autocomplete="off" />
+                        <button type="submit" id="send-button" class="send__button">
                           <img src="{{ url_for('static', filename='svg/enter.svg') }}" alt="Enviar" />
                         </button>
                       </div>
@@ -112,6 +112,7 @@
                   </div>
                 </div>
               </div>
+
             </div>
 
             <div class="chat__sidebar">
@@ -126,18 +127,19 @@
                   <h2 class="group__title">FRECUENTES</h2>
                   <ul class="group__list">
                     <li class="group__item">
-                      <div class="fn__chat_link active"><span class="text">Calificaciones</span></div>
+                      <div class="fn__chat_link active"><span class="text">Alcances</span></div>
                     </li>
                     <li class="group__item">
-                      <div class="fn__chat_link"><span class="text">Información</span></div>
+                      <div class="fn__chat_link"><span class="text">Inversión</span></div>
                     </li>
                     <li class="group__item">
-                      <div class="fn__chat_link"><span class="text">Docentes</span></div>
+                      <div class="fn__chat_link"><span class="text">Interacciones</span></div>
                     </li>
                   </ul>
                 </div>
               </div>
             </div>
+
           </div>
         </div>
 
@@ -148,6 +150,7 @@
             </div>
           </div>
         </footer>
+
       </div>
     </div>
   </div>
@@ -157,50 +160,61 @@
   <script src="{{ url_for('static', filename='js/init.js') }}"></script>
 
   <script>
-    const form = document.getElementById('message-form');
-    const messagesDiv = document.getElementById('messages');
-
-    function appendMessage(role, text) {
-      const wrapper = document.createElement('div');
-      wrapper.classList.add('chat-message', role);
-
-      const label = document.createElement('div');
-      label.classList.add('chat-role');
-      label.textContent = role === 'user' ? 'TÚ' : 'Rasgael';
-
-      const bubble = document.createElement('div');
-      bubble.classList.add('chat-bubble');
-      bubble.innerHTML = text || '⚠️ Sin respuesta del asistente.';
-
-      wrapper.appendChild(label);
-      wrapper.appendChild(bubble);
-      messagesDiv.appendChild(wrapper);
-      messagesDiv.scrollTop = messagesDiv.scrollHeight;
-    }
-
-    form.addEventListener('submit', function (event) {
-      event.preventDefault();
+    document.addEventListener('DOMContentLoaded', function () {
+      const form = document.getElementById('message-form');
       const input = document.getElementById('message');
-      const userMessage = input.value.trim();
-      if (userMessage === "") return;
+      const messagesDiv = document.getElementById('messages');
 
-      appendMessage('user', userMessage);
+      function appendMessage(role, text) {
+        const wrapper = document.createElement('div');
+        wrapper.classList.add('chat-message', role);
 
-      fetch("/send_message", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ message: userMessage })
-      })
-        .then(response => response.json())
-        .then(data => {
+        const label = document.createElement('div');
+        label.classList.add('chat-role');
+        label.textContent = role === 'user' ? 'TÚ' : 'Rasgael';
+
+        const bubble = document.createElement('div');
+        bubble.classList.add('chat-bubble');
+        bubble.innerHTML = text || '⚠️ Sin respuesta del asistente.';
+
+        wrapper.appendChild(label);
+        wrapper.appendChild(bubble);
+        messagesDiv.appendChild(wrapper);
+        messagesDiv.scrollTop = messagesDiv.scrollHeight;
+      }
+
+      async function sendMessage() {
+        const userMessage = input.value.trim();
+        if (userMessage === "") return;
+
+        appendMessage('user', userMessage);
+        input.value = "";
+
+        try {
+          const response = await fetch("/send_message", {
+            method: "POST",
+            headers: {
+              "Content-Type": "application/json"
+            },
+            body: JSON.stringify({ message: userMessage })
+          });
+
+          if (!response.ok) {
+            throw new Error('Error al enviar el mensaje.');
+          }
+
+          const data = await response.json();
           appendMessage('bot', data.bot_message);
-        })
-        .catch(error => {
+        } catch (error) {
           console.error("Error:", error);
           appendMessage('bot', '❌ Error al procesar la respuesta.');
-        });
+        }
+      }
 
-      input.value = "";
+      form.addEventListener('submit', function (event) {
+        event.preventDefault();
+        sendMessage();
+      });
     });
   </script>
 </body>

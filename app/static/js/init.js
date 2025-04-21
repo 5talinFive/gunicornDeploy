@@ -366,6 +366,7 @@ var FrenifyTechWaveTime = new Date();
 				if(text === '' || button.hasClass('disabled')){
 					return;
 				}else{
+					var text = textarea.val() || '';  // <-- Aseguramos que text sea string
 					text = text.replace(/\n\r?/g, '<br />');
 					TechwaveUserQuestion = text;
 					var activeChatItem = $('.fn__chatbot .chat__item.active');
