@@ -22,8 +22,8 @@ Session(app)
 # Configuración de Google Sheets
 SHEET_ID = "1LvDxCBZuACJZffyVB7mAYYoYpqHQA7D4a6peYq8qMSo"
 RANGO_CAMPANAS = "CAMPANAS!A2:K"
-# CRED_PATH = os.path.join(os.path.dirname(__file__), 'credenciales_google.json')
-CRED_PATH = '/etc/secrets/GOOGLE_APPLICATION_CREDENTIALS'
+RANGO_CLIENTES = "CLIENTES!A2:D"
+CRED_PATH = os.path.join(os.path.dirname(__file__), 'credenciales_google.json')
 
 # Conectar con Google Sheets
 def obtener_hoja_service():
@@ -31,20 +31,36 @@ def obtener_hoja_service():
         CRED_PATH, scopes=["https://www.googleapis.com/auth/spreadsheets.readonly"]
     )
     service = build('sheets', 'v4', credentials=creds)
-    sheet = service.spreadsheets()
-    return sheet
+    return service.spreadsheets()
 
-# Leer datos de campañas
+# Leer hoja CLIENTES
+def obtener_clientes():
+    sheet = obtener_hoja_service()
+    result = sheet.values().get(spreadsheetId=SHEET_ID, range=RANGO_CLIENTES).execute()
+    valores = result.get('values', [])
+
+    clientes = []
+    for fila in valores:
+        if len(fila) >= 4:
+            clientes.append({
+                "id": fila[0],
+                "nombre": fila[1],
+                "ciudad": fila[2],
+                "plataforma": fila[3]
+            })
+    return clientes
+
+# Leer hoja CAMPANAS
 def obtener_campanas():
     sheet = obtener_hoja_service()
     result = sheet.values().get(spreadsheetId=SHEET_ID, range=RANGO_CAMPANAS).execute()
     valores = result.get('values', [])
-    
+
     campanas = []
     for fila in valores:
         if len(fila) >= 11:
             campanas.append({
-                "cliente": fila[0],
+                "cliente": fila[0],  # ID del cliente
                 "campana": fila[1],
                 "plataforma": fila[2],
                 "ciudad": fila[3],
@@ -56,6 +72,19 @@ def obtener_campanas():
                 "fecha_inicio": fila[9],
                 "fecha_fin": fila[10]
             })
+    return campanas
+
+# Combinar campañas con nombres reales
+def campañas_con_nombres():
+    campanas = obtener_campanas()
+    clientes = obtener_clientes()
+
+    mapa_clientes = {c['id']: c['nombre'] for c in clientes}
+
+    for c in campanas:
+        id_cliente = c['cliente']
+        c['cliente'] = mapa_clientes.get(id_cliente, f"ID {id_cliente}")
+
     return campanas
 
 # RUTAS
@@ -103,60 +132,84 @@ def send_message():
 
 def get_response(message):
     message = message.strip().lower()
-
-    # Buscar primero en los datos de campañas
     respuesta_campanas = responder_info_campanas(message)
     if respuesta_campanas:
         return respuesta_campanas
-
-    # Si no encontró nada, responde con el modelo GPT
     return responder_pregunta_general(message)
 
-# FUNCIONES
-
 def responder_info_campanas(message):
-    campanas = obtener_campanas()
+    campanas = campañas_con_nombres()
 
     if "clientes" in message:
-        clientes = [c['cliente'] for c in campanas]
-        clientes_str = ' - '.join(sorted(set(clientes)))
-        return f"🗒️ Clientes actuales: - {clientes_str}"
+        clientes = obtener_clientes()
+        lista = sorted(set(c['nombre'] for c in clientes))
+        return "🗒️ Clientes actuales:\n- " + "\n- ".join(lista)
 
-    if "mayor alcance" in message:
-        mayor = max(campanas, key=lambda x: int(x['alcance']))
-        session['ultimo_cliente'] = mayor['cliente']
-        return f"📈 Mayor alcance: {mayor['cliente']} ({mayor['alcance']} personas)"
+    if any(palabra in message for palabra in [
+        "total de inversion", "suma de inversion", "suma total", "total inversión",
+        "inversion total", "dame el total de inversion", "cuánto se invirtió"
+    ]):
+        total = 0
+        detalles = []
+        for c in campanas:
+            try:
+                monto = float(c['inversion'].replace('$', '').replace(',', '').strip())
+                total += monto
+                detalles.append(f"{c['cliente']}: ${monto:,.2f}")
+            except:
+                continue
+        respuesta = "💰 Inversión por cliente:\n" + "\n".join(detalles)
+        respuesta += f"\n\n🔢 Inversión total: ${total:,.2f}"
+        return respuesta
 
-    if any(palabra in message for palabra in ["inversion", "inversión"]):
-        ultimo_cliente = session.get('ultimo_cliente')
-        if ultimo_cliente:
-            for campana in campanas:
-                if campana['cliente'].lower() == ultimo_cliente.lower():
-                    return f"💵 Inversión de {campana['cliente']}: {campana['inversion']}"
-            return "⚠️ No encontré el dato de inversión del último cliente mencionado."
+    if "menos se invirtió" in message or "invirtió menos" in message or "menor inversión" in message:
+        min_cliente = None
+        min_valor = float('inf')
+        for c in campanas:
+            try:
+                monto = float(c['inversion'].replace('$', '').replace(',', '').strip())
+                if monto < min_valor:
+                    min_valor = monto
+                    min_cliente = c['cliente']
+            except:
+                continue
+        if min_cliente:
+            return f"📉 El cliente con menor inversión es **{min_cliente}** con ${min_valor:,.2f}"
         else:
-            return "⚠️ No tengo un cliente reciente para buscar la inversión. Por favor, especifica el nombre."
+            return "⚠️ No pude determinar el cliente con menor inversión por un error en los datos."
+
+    if "comparativa" in message or ("alcance" in message and "cliente" in message):
+        comparativa = {}
+        for c in campanas:
+            try:
+                comparativa.setdefault(c['cliente'], 0)
+                comparativa[c['cliente']] += int(c['alcance'].replace(',', ''))
+            except:
+                continue
+        ordenado = sorted(comparativa.items(), key=lambda x: x[1], reverse=True)
+        comparacion = [f"{cliente}: {alcance:,} personas" for cliente, alcance in ordenado]
+        return "📊 Comparativa de alcances por cliente:\n" + "\n".join(comparacion)
 
     for campana in campanas:
         cliente = campana['cliente'].lower()
         if cliente in message:
             session['ultimo_cliente'] = cliente
-            respuesta = ""
-            if "inversion" in message or "inversión" in message:
-                respuesta += f"💰 Inversión: {campana['inversion']}\n"
-            if "alcance" in message:
-                respuesta += f"📈 Alcance: {campana['alcance']} personas\n"
-            if "interacciones" in message:
-                respuesta += f"🗨️ Interacciones: {campana['interacciones']}\n"
-            if "segmentación" in message or "segmentacion" in message:
-                respuesta += f"🎯 Segmentación: {campana['segmentacion']}\n"
-            if "formato" in message or "formato creativo" in message:
-                respuesta += f"🖼️ Formato creativo: {campana['formato_creativo']}\n"
-            if "fecha" in message:
-                respuesta += f"📅 Desde {campana['fecha_inicio']} hasta {campana['fecha_fin']}\n"
+            respuesta = [f"📌 Información de {campana['cliente']}:"]
 
-            if respuesta:
-                return respuesta.strip()
+            if "inversion" in message or "inversión" in message:
+                respuesta.append(f"💰 Inversión: {campana['inversion']}")
+            if "alcance" in message:
+                respuesta.append(f"📈 Alcance: {campana['alcance']} personas")
+            if "interacciones" in message:
+                respuesta.append(f"🗨️ Interacciones: {campana['interacciones']}")
+            if "segmentación" in message or "segmentacion" in message:
+                respuesta.append(f"🎯 Segmentación: {campana['segmentacion']}")
+            if "formato" in message:
+                respuesta.append(f"🖼️ Formato creativo: {campana['formato_creativo']}")
+            if "fecha" in message:
+                respuesta.append(f"📅 Desde {campana['fecha_inicio']} hasta {campana['fecha_fin']}")
+
+            return "\n".join(respuesta)
 
     return None
 
@@ -165,7 +218,7 @@ def responder_pregunta_general(message):
         response = openai.ChatCompletion.create(
             model="gpt-3.5-turbo",
             messages=[
-                {"role": "system", "content": "Eres FARUM, un asistente especializado en marketing digital, campañas de publicidad y asesoría comercial. Si el usuario menciona campañas o clientes, debes responder pidiendo más detalles si no son claros."},
+                {"role": "system", "content": "Eres FARUM, un asistente especializado en marketing digital, campañas de publicidad y asesoría comercial. Si el usuario menciona campañas o clientes, responde de forma natural y analiza los datos disponibles."},
                 {"role": "user", "content": message}
             ]
         )
