@@ -20,8 +20,8 @@ Session(app)
 
 # 📊 Configuración de Google Sheets
 SHEET_ID = "1LvDxCBZuACJZffyVB7mAYYoYpqHQA7D4a6peYq8qMSo"
-# CRED_PATH = os.path.join(os.path.dirname(__file__), 'credenciales_google.json')
-CRED_PATH = '/etc/secrets/GOOGLE_APPLICATION_CREDENTIALS'
+CRED_PATH = os.path.join(os.path.dirname(__file__), 'credenciales_google.json')
+# CRED_PATH = '/etc/secrets/GOOGLE_APPLICATION_CREDENTIALS'
 
 RANGO_CLIENTES = "CLIENTES!A1:D"
 RANGO_CAMPANAS = "CAMPANAS!A1:F"
@@ -104,6 +104,7 @@ def get_response(message, datos):
                         "Eres FARUM, un asistente especializado en marketing, campañas y análisis comercial. "
                         "A continuación se te proporciona información real desde tres hojas de cálculo. "
                         "Usa estos datos para responder de manera útil, comparativa y natural:"
+                        "Si el usuario pide rankings, análisis o comparativas, responde con listados claros, sugerencias y un lenguaje profesional pero accesible:"
                         f"\n\nCLIENTES:\n{json.dumps(datos['CLIENTES'], indent=2)}"
                         f"\n\nCAMPANAS:\n{json.dumps(datos['CAMPANAS'], indent=2)}"
                         f"\n\nCONSOLIDADO:\n{json.dumps(datos['CONSOLIDADO'], indent=2)}"

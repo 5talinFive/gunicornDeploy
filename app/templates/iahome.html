@@ -127,13 +127,13 @@
                   <h2 class="group__title">FRECUENTES</h2>
                   <ul class="group__list">
                     <li class="group__item">
-                      <div class="fn__chat_link active"><span class="text">Alcances</span></div>
+                      <div class="fn__chat_link" data-message="Ranking de alcance y sugerencias de mejora"><span class="text">Alcances</span></div>
                     </li>
                     <li class="group__item">
-                      <div class="fn__chat_link"><span class="text">Inversión</span></div>
+                      <div class="fn__chat_link" data-message="Comparativa de inversión entre clientes y recomendaciones"><span class="text">Inversión</span></div>
                     </li>
                     <li class="group__item">
-                      <div class="fn__chat_link"><span class="text">Interacciones</span></div>
+                      <div class="fn__chat_link" data-message="Ranking de interacciones y cómo mejorarlas"><span class="text">Interacciones</span></div>
                     </li>
                   </ul>
                 </div>
@@ -161,61 +161,114 @@
 
   <script>
     document.addEventListener('DOMContentLoaded', function () {
-      const form = document.getElementById('message-form');
-      const input = document.getElementById('message');
-      const messagesDiv = document.getElementById('messages');
+  const form = document.getElementById('message-form');
+  const input = document.getElementById('message');
+  const messagesDiv = document.getElementById('messages');
 
-      function appendMessage(role, text) {
-        const wrapper = document.createElement('div');
-        wrapper.classList.add('chat-message', role);
 
-        const label = document.createElement('div');
-        label.classList.add('chat-role');
-        label.textContent = role === 'user' ? 'TÚ' : 'FarumIA';
+  function renderMarkdown(text) {
+  return text
+    .replace(/\*\*(.*?)\*\*/g, '<strong>$1</strong>') // Negrita
+    .replace(/\n/g, '<br>'); // Saltos de línea
+}
 
-        const bubble = document.createElement('div');
-        bubble.classList.add('chat-bubble');
-        bubble.innerHTML = text || '⚠️ Sin respuesta del asistente.';
+// function renderMarkdown(text) {
+//   return text
+//     .replace(/^### (.*$)/gim, '<h3>$1</h3>')      // Encabezado nivel 3
+//     .replace(/^## (.*$)/gim, '<h2>$1</h2>')        // Encabezado nivel 2
+//     .replace(/^# (.*$)/gim, '<h1>$1</h1>')         // Encabezado nivel 1
+//     .replace(/\*\*(.*?)\*\*/g, '<strong>$1</strong>')  // Negrita
+//     .replace(/\n/g, '<br>');                      // Saltos de línea
+// }
 
-        wrapper.appendChild(label);
-        wrapper.appendChild(bubble);
-        messagesDiv.appendChild(wrapper);
-        messagesDiv.scrollTop = messagesDiv.scrollHeight;
-      }
 
-      async function sendMessage() {
-        const userMessage = input.value.trim();
-        if (userMessage === "") return;
 
-        appendMessage('user', userMessage);
-        input.value = "";
+//convierte texto en negrita
+  function appendMessage(role, text) {
+    const wrapper = document.createElement('div');
+    wrapper.classList.add('chat-message', role);
 
-        try {
-          const response = await fetch("/send_message", {
-            method: "POST",
-            headers: {
-              "Content-Type": "application/json"
-            },
-            body: JSON.stringify({ message: userMessage })
-          });
+    const label = document.createElement('div');
+    label.classList.add('chat-role');
+    label.textContent = role === 'user' ? 'TÚ' : 'FarumIA';
 
-          if (!response.ok) {
-            throw new Error('Error al enviar el mensaje.');
-          }
+    const bubble = document.createElement('div');
+    bubble.classList.add('chat-bubble');
+    // bubble.innerHTML = text || '⚠️ Sin respuesta del asistente.';
+    bubble.innerHTML = renderMarkdown(text || '⚠️ Sin respuesta del asistente.');
 
-          const data = await response.json();
-          appendMessage('bot', data.bot_message);
-        } catch (error) {
-          console.error("Error:", error);
-          appendMessage('bot', '❌ Error al procesar la respuesta.');
-        }
-      }
 
-      form.addEventListener('submit', function (event) {
-        event.preventDefault();
-        sendMessage();
+    wrapper.appendChild(label);
+    wrapper.appendChild(bubble);
+    messagesDiv.appendChild(wrapper);
+    messagesDiv.scrollTop = messagesDiv.scrollHeight;
+  }
+
+  async function sendMessage() {
+    const userMessage = input.value.trim();
+    if (userMessage === "") return;
+
+    appendMessage('user', userMessage);
+    input.value = "";
+
+    try {
+      const response = await fetch("/send_message", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json"
+        },
+        body: JSON.stringify({ message: userMessage })
       });
+
+      if (!response.ok) {
+        throw new Error('Error al enviar el mensaje.');
+      }
+
+      const data = await response.json();
+      appendMessage('bot', data.bot_message);
+    } catch (error) {
+      console.error("Error:", error);
+      appendMessage('bot', '❌ Error al procesar la respuesta.');
+    }
+  }
+
+  form.addEventListener('submit', function (event) {
+    event.preventDefault();
+    sendMessage();
+  });
+
+  // ✅ ESTE BLOQUE debe estar AQUÍ y no dentro del submit
+  document.querySelectorAll('.fn__chat_link').forEach(btn => {
+    btn.addEventListener('click', async () => {
+      const message = btn.dataset.message;
+      if (!message) return;
+
+      appendMessage('user', message);
+
+      try {
+        const response = await fetch("/send_message", {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json"
+          },
+          body: JSON.stringify({ message: message, auto: true })
+        });
+
+        if (!response.ok) throw new Error('Error al enviar el mensaje.');
+
+        const data = await response.json();
+        appendMessage('bot', data.bot_message);
+      } catch (error) {
+        console.error("Error:", error);
+        appendMessage('bot', '❌ Error al procesar la respuesta.');
+      }
     });
+  });
+});
+
+
+
+
   </script>
 </body>
 
