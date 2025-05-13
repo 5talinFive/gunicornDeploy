@@ -20,8 +20,8 @@ Session(app)
 
 # 📊 Configuración de Google Sheets
 SHEET_ID = "1LvDxCBZuACJZffyVB7mAYYoYpqHQA7D4a6peYq8qMSo"
-CRED_PATH = os.path.join(os.path.dirname(__file__), 'credenciales_google.json')
-# CRED_PATH = '/etc/secrets/GOOGLE_APPLICATION_CREDENTIALS'
+# CRED_PATH = os.path.join(os.path.dirname(__file__), 'credenciales_google.json')
+CRED_PATH = '/etc/secrets/GOOGLE_APPLICATION_CREDENTIALS'
 
 RANGO_CLIENTES = "CLIENTES!A1:D"
 RANGO_CAMPANAS = "CAMPANAS!A1:F"
