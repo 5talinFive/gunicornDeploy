@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Rasgael - Asistente Educativo</title>
+  <title>Farum</title>
 
   <script>
     if (!localStorage.frenify_skin) localStorage.frenify_skin = 'dark';
@@ -133,6 +133,8 @@
                   <h1 class="title">Bienvenidos a Farum</h1>
                   <p class="desc">Tu asiste creativo de gestión y marketing.</p>
                 </div>
+
+
                 <div class="techwave_fn_interactive_list">
                   <ul>
                     <li>
@@ -147,9 +149,23 @@
                         </a>
                       </div>
                     </li>
+                    <li>
+                      <div class="item">
+                        <a href="{{ url_for('main.imagenes') }}">
+                          <span class="icon">
+                            <img src="{{ url_for('static', filename='svg/image.svg') }}" alt="" class="fn__svg">
+                          </span>
+                          <h2 class="title">Generador de Imágenes</h2>
+                          <p class="desc">Transforma ideas en imágenes usando IA generativa.</p>
+                          <span class="arrow"><img src="{{ url_for('static', filename='svg/arrow.svg') }}" alt="" class="fn__svg"></span>
+                        </a>
+                      </div>
+                    </li>
                   </ul>
                 </div>
-              </div>
+                
+
+
               <div class="section_right">
                 <div class="company_info">
                   <img src="{{ url_for('static', filename='img/logo-desktop-full.png') }}" alt="">

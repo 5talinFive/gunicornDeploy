@@ -1,5 +1,6 @@
 import os
 import json
+from openai import OpenAI
 from flask import Flask, Blueprint, render_template, request, jsonify, session, redirect, url_for
 import openai
 from dotenv import load_dotenv
@@ -54,6 +55,43 @@ def cargar_datos():
 def home():
     return render_template('index.html')
 
+@main.route('/generador-imagenes')
+def imagenes():
+    return render_template('image-generation.html')
+
+
+# Ruta oara generar imagenes con DALL-E 
+@main.route('/generar_imagen', methods=['POST'])
+def generar_imagen():
+    from flask import request, jsonify
+
+    client = OpenAI(api_key=os.getenv("OPENAI_API_KEY"))
+
+    datos = request.json
+    nombre_cliente = datos.get("nombre_cliente", "Cliente")
+    ciudad = datos.get("ciudad", "Ciudad")
+    # plataforma = datos.get("plataforma", "Plataforma")
+    antecedente = datos.get("antecedente", "Sin descripción disponible")
+    prompt_extra = datos.get("prompt_extra", "")
+
+
+    prompt = f"Logo moderno para {nombre_cliente} de {ciudad}, que represente y trasmita su {antecedente}, profesional. {prompt_extra} "
+
+    try:
+        response = client.images.generate(
+            model="dall-e-3",
+            prompt=prompt,
+            size="1024x1024",
+            quality="standard",
+            n=1
+        )
+        image_url = response.data[0].url
+        return jsonify({"imagen_url": image_url})
+    except Exception as e:
+        return jsonify({"error": str(e)}), 500
+
+
+
 @main.route('/informacion')
 def informacion():
     return render_template('informacion.html')
@@ -79,7 +117,39 @@ def logout():
     session.clear()
     return redirect(url_for('main.home'))
 
-# 🧠 Endpoint del chatbot
+
+# @main.route('/generador-imagenes')
+# def imagenes():
+#     return render_template('image-generation.html')
+
+
+@main.route('/get_clientes', methods=['GET'])
+def get_clientes():
+    datos = cargar_datos()
+    print("🔎 Primer registro de CLIENTES:", datos["CLIENTES"][0])  # solo para verificar
+    clientes = [fila["Nombre Cliente"] for fila in datos["CLIENTES"]]  # ¡Nombre de la la columna Nombre Cliente, hoja CLIENTES!
+    return jsonify({"clientes": clientes})
+
+
+# obtiene info del cliente, antecedentes e imagenes
+@main.route('/get_info_cliente', methods=['POST'])
+def get_info_cliente():
+    cliente = request.json.get("cliente")
+    datos = cargar_datos()
+
+    for fila in datos["CLIENTES"]:
+        if fila.get("Nombre Cliente") == cliente:
+            return jsonify({
+                "imagen": fila.get("Imagen", ""),
+                "antecedente": fila.get("Antecedente", "")
+            })
+
+    return jsonify({"error": "Cliente no encontrado"}), 404
+
+
+
+
+#Endpoint del chatbot
 @main.route('/send_message', methods=['POST'])
 def send_message():
     data_json = request.get_json()
@@ -95,7 +165,9 @@ def send_message():
 
 def get_response(message, datos):
     try:
-        response = openai.ChatCompletion.create(
+        client = OpenAI(api_key=os.getenv("OPENAI_API_KEY"))
+
+        response = client.chat.completions.create(
             model="gpt-3.5-turbo",
             messages=[
                 {
@@ -103,7 +175,7 @@ def get_response(message, datos):
                     "content": (
                         "Eres FARUM, un asistente especializado en marketing, campañas y análisis comercial. "
                         "A continuación se te proporciona información real desde tres hojas de cálculo. "
-                        "Usa estos datos para responder de manera útil, comparativa y natural:"
+                        "Usa estos datos para responder de manera útil, comparativa y natural. "
                         "Si el usuario pide rankings, análisis o comparativas, responde con listados claros, sugerencias y un lenguaje profesional pero accesible:"
                         f"\n\nCLIENTES:\n{json.dumps(datos['CLIENTES'], indent=2)}"
                         f"\n\nCAMPANAS:\n{json.dumps(datos['CAMPANAS'], indent=2)}"
@@ -113,10 +185,12 @@ def get_response(message, datos):
                 {"role": "user", "content": message}
             ]
         )
-        return response['choices'][0]['message']['content']
+
+        return response.choices[0].message.content
     except Exception as e:
         print("❌ Error GPT:", e)
         return "⚠️ Hubo un error al generar la respuesta. Revisa la terminal."
+
 
 # Registrar el blueprint
 app.register_blueprint(main)

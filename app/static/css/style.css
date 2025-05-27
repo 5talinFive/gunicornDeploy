@@ -707,17 +707,19 @@ frenify_typing span {
 /* TAMAÑOS DE LOGO */
 .desktop_logo,
 .retina_logo {
-  max-height: 100px; /* Puedes ajustar este valor (por defecto suele ser 50px o más) */
-  height: auto;
-  width: auto;
+	max-height: 100px;
+	/* Puedes ajustar este valor (por defecto suele ser 50px o más) */
+	height: auto;
+	width: auto;
 }
 
 /* Reducción de tamaño solo para el logo dentro de .company_info */
 .company_info img {
-	max-height: 100px; /* O puedes probar con 40px o incluso 35px */
+	max-height: 100px;
+	/* O puedes probar con 40px o incluso 35px */
 	height: auto;
 	width: auto;
-  }
+}
 
 .techwave_fn_leftpanel {
 	z-index: 101;
@@ -1736,19 +1738,38 @@ frenify_typing span {
 	display: -ms-flex;
 	display: -o-flex;
 	display: flex;
+	flex-direction: row;
+	justify-content: space-between;
 	min-height: calc(100vh - var(--techwave-header-height) - 71px);
+	display: flex;
+	justify-content: space-between;
+	align-items: flex-start;
+	flex-wrap: nowrap;
+	/* fuerza que todo esté en una fila */
+	gap: 40px;
 }
 
 .section_home .section_left {
 	padding: 93px 40px 80px;
 	border-right: 1px solid var(--techwave-border-color);
 	width: 60%;
+	padding: 40px;
+	box-sizing: border-box;
 }
 
 .section_home .section_right {
 	width: 40%;
 	padding: 155px 40px;
+	box-sizing: border-box;
+	flex-wrap: nowrap;
 }
+
+.section_home .section_left {
+	width: 60%;
+	padding: 40px;
+	box-sizing: border-box;
+}
+
 
 .section_home .company_info {
 	margin: 0 auto;
@@ -6468,12 +6489,38 @@ a.fn__like.no_border .fn__svg {
 .fn__generation_list .fn__gl__item:before {
 	content: "";
 	height: 0px;
-	display: block;
+	display: none;
 	padding-bottom: 100%;
 }
 
+
+/* TAMAÑOS DE LA IMAGEN GENERADA */
+/* .fn_gl_item .abs_item */
+.fn_gl_item {
+	display: flex;
+	justify-content: center;
+	align-items: center;
+  }
+
+  .abs_item {
+	margin: 0 auto;
+	width: 100%;
+	max-width: 300px;
+  }
+
+  .img-generada {
+	display: block;
+	width: 100%;
+	height: auto;
+	object-fit: contain;
+	margin: 0 auto;
+	cursor: pointer;
+  }
+  /* ////////////////////////////////////////// */
+   
+
 .fn__generation_list .abs_item {
-	position: absolute;
+	position: relative;
 	top: 0;
 	left: 0;
 	bottom: 0;
@@ -6482,9 +6529,12 @@ a.fn__like.no_border .fn__svg {
 
 .fn__generation_list .abs_item img {
 	width: 100%;
-	height: 100%;
-	object-fit: cover;
+	height: auto;
+	object-fit: contain;
 	border-radius: 5px;
+	display: flex;
+	justify-content: center;
+	align-items: center;
 }
 
 .fn__generation_list .fn__gl__item:hover .all_options {
@@ -6515,6 +6565,27 @@ a.fn__like.no_border .fn__svg {
 .fn__generation_list .all_options .fn__icon_options {
 	margin: 0 5px 5px 0;
 }
+
+/* .fn__generation_list img {
+	width: 100%;
+	height: 100%;
+	object-fit: contain;
+	border-radius: 8px;
+	display: block;
+  } */
+
+.fn__generation_list img.img-generada {
+	width: 50%;
+	height: 70%;
+	object-fit: cover;
+	border-radius: 8px;
+	display: block;
+}
+
+.fn_gl_item {
+	text-align: center;
+  }
+
 
 /*------------------------------------------------------------------*/
 /*	52) Input Toggle (custom)
@@ -8098,6 +8169,7 @@ a.fn__like.no_border .fn__svg {
 	.section_home .section_right {
 		width: 100%;
 		padding: 70px 20px;
+		flex-wrap: nowrap;
 	}
 
 	.techwave_fn_footer {
